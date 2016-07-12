@@ -23,13 +23,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PersonalNotes"
-            android:label="@string/title_activity_personal_notes"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="mobidev.com.notesfeed.LoginActivity" />
-        </activity>
+            android:name=".NotesFeed_main"
+            android:label="@string/title_activity_notes_feed_main"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

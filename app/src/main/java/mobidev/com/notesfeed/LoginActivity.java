@@ -190,7 +190,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask.execute((Void) null);
         }
 
-        Intent gotoMain = new Intent(this, PersonalNotes.class);
+        Intent gotoMain = new Intent(this, NotesFeed_main.class);
         startActivity(gotoMain);
     }
 
