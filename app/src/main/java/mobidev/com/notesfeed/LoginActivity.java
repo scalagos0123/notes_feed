@@ -186,9 +186,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            CheckLogin c = new CheckLogin(this);
+            CheckLogin c = new CheckLogin(this, this);
             c.execute(email, password);
-            showProgress(false);
         }
     }
 

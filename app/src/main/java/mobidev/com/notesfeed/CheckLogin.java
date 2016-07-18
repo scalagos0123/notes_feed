@@ -22,9 +22,11 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
 
     private Context context;
     private boolean loginStatus;
+    private LoginActivity activityMethods;
 
-    public CheckLogin(Context context) {
+    public CheckLogin(Context context, LoginActivity thisLoginActivity) {
         this.context = context;
+        this.activityMethods = thisLoginActivity;
     }
 
     @Override
@@ -82,6 +84,7 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
 
     protected void onPostExecute (Boolean result) {
         if (this.loginStatus == true) {
+            activityMethods.showProgress(false);
             Intent i = new Intent (context, NotesFeed_main.class);
             context.startActivity(i);
         } else {
