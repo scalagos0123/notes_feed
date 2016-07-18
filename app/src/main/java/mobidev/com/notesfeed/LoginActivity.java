@@ -191,6 +191,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    public void toRegisterForm(View view) {
+        Intent toRegister = new Intent(this, SignUp.class);
+        startActivity(toRegister);
+    }
+
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         return email.contains("@");
