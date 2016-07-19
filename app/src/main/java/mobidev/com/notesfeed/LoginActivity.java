@@ -188,6 +188,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             CheckLogin c = new CheckLogin(this, this);
             c.execute(email, password);
+
+            if (c.getResult() == false) {
+                showProgress(false);
+            }
         }
     }
 

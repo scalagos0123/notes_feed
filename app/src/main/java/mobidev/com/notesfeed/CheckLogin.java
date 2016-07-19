@@ -29,6 +29,10 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
         this.activityMethods = thisLoginActivity;
     }
 
+    public boolean getResult() {
+        return this.loginStatus;
+    }
+
     @Override
     protected Boolean doInBackground(String... params) {
         String username = (String) params[0];
