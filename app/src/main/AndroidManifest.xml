@@ -24,9 +24,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NotesFeed_main"
-            android:label="@string/title_activity_notes_feed_main"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".MainActivity"
+            android:label="@string/title_activity_notes_feed_main">
+
+        </activity>
         <activity
             android:name=".SignUp"
             android:parentActivityName=".LoginActivity"

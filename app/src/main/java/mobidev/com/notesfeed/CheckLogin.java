@@ -89,7 +89,7 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
     protected void onPostExecute (Boolean result) {
         if (this.loginStatus == true) {
             activityMethods.showProgress(false);
-            Intent i = new Intent (context, NotesFeed_main.class);
+            Intent i = new Intent (context, MainActivity.class);
             context.startActivity(i);
         } else {
             Toast.makeText(context, "User doesn't exist", Toast.LENGTH_SHORT).show();
