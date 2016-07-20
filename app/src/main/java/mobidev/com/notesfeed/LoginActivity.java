@@ -186,12 +186,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
-        }
+            CheckLogin c = new CheckLogin(this, this);
+            c.execute(email, password);
 
-        Intent gotoMain = new Intent(this, NotesFeed_main.class);
-        startActivity(gotoMain);
+            if (c.getResult() == false) {
+                showProgress(false);
+            }
+        }
+    }
+
+    public void toRegisterForm(View view) {
+        Intent toRegister = new Intent(this, SignUp.class);
+        startActivity(toRegister);
     }
 
     private boolean isEmailValid(String email) {
@@ -208,7 +214,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
+    public void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
