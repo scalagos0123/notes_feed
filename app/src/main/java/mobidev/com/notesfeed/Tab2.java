@@ -9,12 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 /**
  * Created by Belal on 2/3/2016.
  */
 
 //Our class extending fragment
 public class Tab2 extends Fragment {
+
+    private List<Group> groups;
 
     //Overriden method onCreateView
     @Override

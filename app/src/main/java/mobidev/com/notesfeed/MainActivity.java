@@ -1,10 +1,10 @@
 package mobidev.com.notesfeed;
 
+import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 
 //Implementing the interface OnTabSelectedListener to our MainActivity
 //This interface would help in swiping views
@@ -26,9 +26,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
         //Adding the tabs using addTab() method
-        tabLayout.addTab(tabLayout.newTab().setText("Tab1"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab2"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab3"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         //Initializing viewPager
@@ -39,14 +36,13 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         //Adding adapter to pager
         viewPager.setAdapter(adapter);
-
-        //Adding onTabSelectedListener to swipe views
         tabLayout.setOnTabSelectedListener(this);
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         viewPager.setCurrentItem(tab.getPosition());
+        getSupportActionBar().setWindowTitle(tab.getText());
     }
 
     @Override
