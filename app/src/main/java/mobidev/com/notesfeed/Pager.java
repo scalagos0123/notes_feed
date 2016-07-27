@@ -27,24 +27,46 @@ public class Pager extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         //Returning the current tabs
+        Fragment f = null;
         switch (position) {
             case 0:
-                Tab1 tab1 = new Tab1();
-                return tab1;
+                f = new Tab1();
+                break;
             case 1:
-                Tab2 tab2 = new Tab2();
-                return tab2;
+                f = new Tab2();
+                break;
             case 2:
-                Tab3 tab3 = new Tab3();
-                return tab3;
+                f = new Tab3();
+                break;
             default:
                 return null;
         }
+
+        return f;
     }
 
     //Overriden method getCount to get the number of tabs
     @Override
     public int getCount() {
         return tabCount;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        String tabTitle = "";
+
+        switch (position) {
+            case 0:
+                tabTitle = "My Notes";
+                break;
+            case 1:
+                tabTitle = "Groups";
+                break;
+            case 2:
+                tabTitle = "Settings";
+                break;
+        }
+
+        return tabTitle;
     }
 }

@@ -2,16 +2,22 @@ package mobidev.com.notesfeed;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.util.JsonReader;
 import android.util.Log;
 import android.widget.Toast;
 
 import org.apache.http.client.methods.HttpGet;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.lang.reflect.Array;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -23,6 +29,9 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
     private Context context;
     private boolean loginStatus;
     private LoginActivity activityMethods;
+    private String userId;
+    private String user_fullname;
+    SharedPreferences session;
 
     public CheckLogin(Context context, LoginActivity thisLoginActivity) {
         this.context = context;
@@ -35,9 +44,9 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(String... params) {
-        String username = (String) params[0];
-        String password = (String) params[1];
-        String link = "http://SHAUN-G501/notesfeed/getusers.php";
+        String username = params[0];
+        String password = params[1];
+        String link = "http://192.168.254.102/notesfeed/getusers.php";
 
         Map<String, String> loginValues = new LinkedHashMap<>();
         loginValues.put("email", username);
@@ -62,20 +71,36 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
             getUrl.setDoOutput(true);
             System.out.println("Sending data");
             getUrl.getOutputStream().write(loginData);
+            System.out.println("Data sent");
 
-            Reader in = new BufferedReader(new InputStreamReader(getUrl.getInputStream()));
+//            Receiving data from server
+            InputStreamReader is = new InputStreamReader(getUrl.getInputStream());
+            Reader in = new BufferedReader(is);
 
+//            Parsing data received from server
             StringBuilder check = new StringBuilder();
             for (int c; (c = in.read()) >= 0;) {
                 check.append((char)c);
             }
 
-            System.out.println(check.toString());
+            /*
 
-            if (check.toString().equals("true")) {
+            Since I've encoded the name to JSON, this is the current and effective way
+            to convert String to a JSON format (since the server is sending JSON)
+
+             */
+
+            JSONObject receivedJson = new JSONObject(check + "");
+            JSONArray user_name = receivedJson.getJSONArray("user_name");
+            JSONArray condition = receivedJson.getJSONArray("condition");
+            JSONArray user_id = receivedJson.getJSONArray("user_id");
+
+//            Checking condition from JSON
+
+            if (condition.getString(0).equals("true")) {
+                this.user_fullname = user_name.getString(0);
+                this.userId = user_id.getString(0);
                 checkStatus = true;
-            } else {
-                checkStatus = false;
             }
 
         } catch (Exception e) {
@@ -88,10 +113,21 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
 
     protected void onPostExecute (Boolean result) {
         if (this.loginStatus == true) {
-            activityMethods.showProgress(false);
+
+            session = context.getSharedPreferences(activityMethods.SHARED_PREFERENCES, context.MODE_PRIVATE);
+            SharedPreferences.Editor edit = session.edit();
+
+            edit.putString("userId", userId);
+            edit.putString("user_fullname", user_fullname);
+            edit.commit();
+
+            System.out.println(session.getString("userId", null));
+            System.out.println(session.getString("user_fullname", null));
+
             Intent i = new Intent (context, MainActivity.class);
             context.startActivity(i);
         } else {
+            activityMethods.showProgress(false);
             Toast.makeText(context, "User doesn't exist", Toast.LENGTH_SHORT).show();
         }
     }
