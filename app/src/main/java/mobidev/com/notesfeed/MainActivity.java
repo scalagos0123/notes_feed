@@ -3,12 +3,14 @@ package mobidev.com.notesfeed;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 //Implementing the interface OnTabSelectedListener to our MainActivity
 //This interface would help in swiping views
-public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener{
+public class MainActivity extends AppCompatActivity {
 
     //This is our tablayout
     private TabLayout tabLayout;
@@ -20,41 +22,38 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setElevation(0);
+
+//        Toolbar t = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(t);
 
         //Initializing the tablayout
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-
-        //Adding the tabs using addTab() method
-        tabLayout.addTab(tabLayout.newTab().setText("My Notes"));
-        tabLayout.addTab(tabLayout.newTab().setText("Groups"));
-        tabLayout.addTab(tabLayout.newTab().setText("Settings"));
+        viewPager = (ViewPager) findViewById(R.id.pager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        //Initializing viewPager
-        viewPager = (ViewPager) findViewById(R.id.pager);
-
         //Creating our pager adapter
-        Pager adapter = new Pager(getSupportFragmentManager(), tabLayout.getTabCount());
+        Pager adapter = new Pager(getSupportFragmentManager(), 3);
 
         //Adding adapter to pager
         viewPager.setAdapter(adapter);
-        tabLayout.setOnTabSelectedListener(this);
-    }
+        tabLayout.setupWithViewPager(viewPager);
 
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        viewPager.setCurrentItem(tab.getPosition());
-        getSupportActionBar().setWindowTitle(tab.getText());
-    }
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
 
-    }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
+            }
 
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 }

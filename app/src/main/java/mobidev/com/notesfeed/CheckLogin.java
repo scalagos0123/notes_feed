@@ -44,9 +44,9 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(String... params) {
-        String username = (String) params[0];
-        String password = (String) params[1];
-        String link = "http://SHAUN-G501/notesfeed/getusers.php";
+        String username = params[0];
+        String password = params[1];
+        String link = "http://192.168.254.102/notesfeed/getusers.php";
 
         Map<String, String> loginValues = new LinkedHashMap<>();
         loginValues.put("email", username);
@@ -73,48 +73,29 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
             getUrl.getOutputStream().write(loginData);
             System.out.println("Data sent");
 
+//            Receiving data from server
             InputStreamReader is = new InputStreamReader(getUrl.getInputStream());
-//            JsonReader js = new JsonReader(is);
-//
-//            StringBuilder user_fullname = new StringBuilder();
-//
-//            js.beginObject();
-//            while(js.hasNext()) {
-//
-//                String name = js.nextName();
-//
-//                if (name.equals("user_id")) {
-//                    this.userId = js.nextString();
-//                } else if (name.equals("user_fname")) {
-//                    user_fullname.append(js.nextString() + " ");
-//                } else if (name.equals("user_lname")) {
-//                    user_fullname.append(js.nextString());
-//                } else if (name.equals("condition")) {
-//                    if (js.nextString().equals("true")) {
-//                        checkStatus = true;
-//                    } else if (js.nextString().equals("false")) {
-//                        checkStatus = false;
-//                    }
-//                }
-//            }
-//
-//            js.endObject();
-//
-//            this.user_fullname = user_fullname.toString();
-
             Reader in = new BufferedReader(is);
 
+//            Parsing data received from server
             StringBuilder check = new StringBuilder();
             for (int c; (c = in.read()) >= 0;) {
                 check.append((char)c);
             }
 
-            System.out.println(check+ "");
+            /*
+
+            Since I've encoded the name to JSON, this is the current and effective way
+            to convert String to a JSON format (since the server is sending JSON)
+
+             */
 
             JSONObject receivedJson = new JSONObject(check + "");
             JSONArray user_name = receivedJson.getJSONArray("user_name");
             JSONArray condition = receivedJson.getJSONArray("condition");
             JSONArray user_id = receivedJson.getJSONArray("user_id");
+
+//            Checking condition from JSON
 
             if (condition.getString(0).equals("true")) {
                 this.user_fullname = user_name.getString(0);

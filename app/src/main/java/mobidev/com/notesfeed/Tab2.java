@@ -3,7 +3,10 @@ package mobidev.com.notesfeed;
 /**
  * Created by Debbie Co on 7/7/2016.
  */
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,15 @@ import java.util.List;
 public class Tab2 extends Fragment {
 
     private List<Group> groups;
+    SharedPreferences session;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Group g = new Group(getActivity(), "1");
+        session = getActivity().getSharedPreferences(LoginActivity.SHARED_PREFERENCES, getActivity().MODE_PRIVATE);
+        g.getGroupsByUser(session.getString("userId", null));
+    }
 
     //Overriden method onCreateView
     @Override
