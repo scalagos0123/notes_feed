@@ -1,6 +1,10 @@
 package mobidev.com.notesfeed;
 
 import android.os.AsyncTask;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,19 +19,29 @@ public class GroupsConnection extends AsyncTask<String, Void, Map<String, String
 
     @Override
     protected Map<String, String> doInBackground(String... params) {
-        String user_id = params[0];
-        String link = "http://SHAUN-G501/notesfeed/getgroups.php";
-        byte[] user_id_bytes = new byte[1024];
-        user_id_bytes = user_id.getBytes();
+        String user_id = "user_id=" + params[0];
+        String link = "http://192.168.254.102/notesfeed/getgroups.php?" + user_id;
+        byte[] user_id_bytes = user_id.getBytes();
 
         System.out.println("Sending data");
 
         try {
             URL url = new URL(link);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setDoOutput(true);
-            urlConnection.getOutputStream().write(user_id_bytes);
+            urlConnection.setRequestMethod("GET");
             System.out.println("Data sent");
+
+            Reader server_output = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+
+            StringBuilder response = new StringBuilder();
+
+            for (int i; (i = server_output.read()) >= 0;) {
+                response.append((char) i);
+            }
+
+            urlConnection.disconnect();
+            System.out.println(response.toString());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
