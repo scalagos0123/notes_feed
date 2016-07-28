@@ -2,6 +2,9 @@ package mobidev.com.notesfeed;
 
 import android.os.AsyncTask;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -20,7 +23,7 @@ public class GroupsConnection extends AsyncTask<String, Void, Map<String, String
     @Override
     protected Map<String, String> doInBackground(String... params) {
         String user_id = "user_id=" + params[0];
-        String link = "http://192.168.254.102/notesfeed/getgroups.php?" + user_id;
+        String link = "http://SHAUN-G501/notesfeed/getgroups.php?" + user_id;
         byte[] user_id_bytes = user_id.getBytes();
 
         System.out.println("Sending data");
@@ -40,6 +43,15 @@ public class GroupsConnection extends AsyncTask<String, Void, Map<String, String
             }
 
             urlConnection.disconnect();
+
+            JSONObject jsonResponse = new JSONObject(response.toString());
+            JSONArray group_id_array = jsonResponse.getJSONArray("group_id");
+            JSONArray group_name_array = jsonResponse.getJSONArray("group_name");
+
+            for (int i = 0; i < group_name_array.length(); i++) {
+                System.out.println(group_name_array.getString(i));
+            }
+
             System.out.println(response.toString());
 
         } catch (Exception e) {

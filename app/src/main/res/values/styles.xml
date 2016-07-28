@@ -21,4 +21,12 @@
         <item name="android:padding">8dp</item>
     </style>
 
+    <style name="TabTextAppearance" parent="Widget.Design.TabLayout">
+        <item name="tabSelectedTextColor">#FFFFFF</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.PrimaryBg" parent="AppTheme.NoActionBar">
+        <item name="android:colorBackground">@color/colorPrimary</item>
+    </style>
+
 </resources>
