@@ -46,7 +46,7 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
     protected Boolean doInBackground(String... params) {
         String username = params[0];
         String password = params[1];
-        String link = "http://SHAUN-G501/notesfeed/getusers.php";
+        String link = "http://192.168.254.101/notesfeed/getusers.php";
 
         Map<String, String> loginValues = new LinkedHashMap<>();
         loginValues.put("email", username);
@@ -115,18 +115,10 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
         if (this.loginStatus == true) {
             activityMethods.showProgress(false);
 
-//            session = context.getSharedPreferences(activityMethods.SHARED_PREFERENCES, context.MODE_PRIVATE);
-//            SharedPreferences.Editor edit = session.edit();
-//
-//            edit.putString("userId", userId);
-//            edit.putString("user_fullname", user_fullname);
-//            edit.commit();
-//
-//            System.out.println(session.getString("userId", null));
-//            System.out.println(session.getString("user_fullname", null));
+            User currentUser = new User(this.userId, this.user_fullname);
 
-            User currentUser = new User(context, this.userId, this.user_fullname);
-            currentUser.startUserSession();
+            NotesFeedSession newSession = new NotesFeedSession(context);
+            newSession.startUserSession(this.userId, this.user_fullname);
 
             Intent i = new Intent (context, MainActivity.class);
             i.putExtra("currentUser", currentUser);
@@ -134,7 +126,7 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
 
         } else {
             activityMethods.showProgress(false);
-            Toast.makeText(context, "User doesn't exist", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Login failed.", Toast.LENGTH_SHORT).show();
         }
     }
 }
