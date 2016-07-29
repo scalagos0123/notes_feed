@@ -32,9 +32,10 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
     private String userId;
     private String user_fullname;
 
-    public CheckLogin(Context context) {
+    public CheckLogin(Context context, LoginActivity thisLoginActivity) {
         this.context = context;
-//        this.activityMethods = thisLoginActivity;
+        this.activityMethods = thisLoginActivity;
+
     }
 
     public boolean getResult() {

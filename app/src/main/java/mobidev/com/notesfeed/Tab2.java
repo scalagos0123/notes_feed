@@ -25,7 +25,6 @@ import java.util.List;
 public class Tab2 extends Fragment {
 
     private ArrayList<Group> groups;
-    SharedPreferences session;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,9 +37,6 @@ public class Tab2 extends Fragment {
 //        g1.addGroup_member(2, "Cassidy");
 //
 //        groups.add(g1);
-
-        User accessUser = (User) savedInstanceState.getSerializable("currentUser");
-        String userId = accessUser.getUserId();
     }
 
     //Overriden method onCreateView

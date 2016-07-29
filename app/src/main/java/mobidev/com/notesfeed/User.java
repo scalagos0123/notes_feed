@@ -14,9 +14,9 @@ public class User implements Serializable {
     private String userId;
     private Context context;
     private SharedPreferences session;
-    public static final String SHARED_PREFERENCES = "Session";
-    public static final String SESSION_USER_ID = "userId";
-    public static final String SESSION_USER_NAME = "user_fullname";
+    public final String SHARED_PREFERENCES = "Session";
+    public final String SESSION_USER_ID = "userId";
+    public final String SESSION_USER_NAME = "user_fullname";
 
     public User(Context context, String userId, String name) {
         this.name = name;

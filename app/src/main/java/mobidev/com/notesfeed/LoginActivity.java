@@ -63,11 +63,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private SharedPreferences sessionData;
-
-    public SharedPreferences getSessionData() {
-        return sessionData;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,7 +189,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //            Intent i = new Intent(this, MainActivity.class);
 //            startActivity(i);
             showProgress(true);
-            CheckLogin c = new CheckLogin(this);
+            CheckLogin c = new CheckLogin(this, this);
             c.execute(email, password);
         }
     }

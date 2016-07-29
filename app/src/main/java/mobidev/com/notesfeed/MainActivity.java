@@ -24,8 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent receiveUser = getIntent();
-        User currentUser = (User) receiveUser.getSerializableExtra("currentUser");
+        User currentUser = (User) getIntent().getSerializableExtra("currentUser");
 
 //        Putting to bundle so that all fragments can access it
         savedInstanceState.putSerializable("currentUser", currentUser);
