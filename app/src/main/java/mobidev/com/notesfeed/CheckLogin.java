@@ -31,11 +31,10 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
     private LoginActivity activityMethods;
     private String userId;
     private String user_fullname;
-    SharedPreferences session;
 
-    public CheckLogin(Context context, LoginActivity thisLoginActivity) {
+    public CheckLogin(Context context) {
         this.context = context;
-        this.activityMethods = thisLoginActivity;
+//        this.activityMethods = thisLoginActivity;
     }
 
     public boolean getResult() {
@@ -114,18 +113,24 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
     protected void onPostExecute (Boolean result) {
         if (this.loginStatus == true) {
             activityMethods.showProgress(false);
-            session = context.getSharedPreferences(activityMethods.SHARED_PREFERENCES, context.MODE_PRIVATE);
-            SharedPreferences.Editor edit = session.edit();
 
-            edit.putString("userId", userId);
-            edit.putString("user_fullname", user_fullname);
-            edit.commit();
+//            session = context.getSharedPreferences(activityMethods.SHARED_PREFERENCES, context.MODE_PRIVATE);
+//            SharedPreferences.Editor edit = session.edit();
+//
+//            edit.putString("userId", userId);
+//            edit.putString("user_fullname", user_fullname);
+//            edit.commit();
+//
+//            System.out.println(session.getString("userId", null));
+//            System.out.println(session.getString("user_fullname", null));
 
-            System.out.println(session.getString("userId", null));
-            System.out.println(session.getString("user_fullname", null));
+            User currentUser = new User(context, this.userId, this.user_fullname);
+            currentUser.startUserSession();
 
             Intent i = new Intent (context, MainActivity.class);
+            i.putExtra("currentUser", currentUser);
             context.startActivity(i);
+
         } else {
             activityMethods.showProgress(false);
             Toast.makeText(context, "User doesn't exist", Toast.LENGTH_SHORT).show();

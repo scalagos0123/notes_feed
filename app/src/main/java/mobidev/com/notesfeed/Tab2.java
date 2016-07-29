@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,32 +24,34 @@ import java.util.List;
 //Our class extending fragment
 public class Tab2 extends Fragment {
 
-    private List<Group> groups;
+    private ArrayList<Group> groups;
     SharedPreferences session;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Group g = new Group(getActivity(), "1");
-        session = getActivity().getSharedPreferences(LoginActivity.SHARED_PREFERENCES, getActivity().MODE_PRIVATE);
-        g.getGroupsByUser(session.getString("userId", null));
+
+//        groups = new ArrayList<Group>();
+//        Group g1 = new Group();
+//        g1.setGroup_name("Sample Group");
+//        g1.addGroup_member(1, "Shaun");
+//        g1.addGroup_member(2, "Cassidy");
+//
+//        groups.add(g1);
+
+        User accessUser = (User) savedInstanceState.getSerializable("currentUser");
+        String userId = accessUser.getUserId();
     }
 
     //Overriden method onCreateView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        //Returning the layout file after inflating
-        //Change R.layout.tab1 in you classes
         View view = inflater.inflate(R.layout.tab_fragment_2, container, false);
         ListView sampleListView = (ListView) view.findViewById(R.id.listView);
-        ArrayAdapter<String> s = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
 
-        for (int i = 0; i < 20; i++) {
-            s.add("Shaun");
-        }
-
-        sampleListView.setAdapter(s);
+        ListAdapter group_adapter = new ListAdapter(getActivity(), R.layout.group_list, groups);
+        sampleListView.setAdapter(group_adapter);
 
         return view;
     }

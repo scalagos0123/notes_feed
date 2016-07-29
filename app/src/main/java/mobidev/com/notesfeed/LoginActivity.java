@@ -63,7 +63,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    public static final String SHARED_PREFERENCES = "Session";
     private SharedPreferences sessionData;
 
     public SharedPreferences getSessionData() {
@@ -100,8 +99,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
-        sessionData = getSharedPreferences(SHARED_PREFERENCES, this.MODE_PRIVATE);
     }
 
     private void populateAutoComplete() {
@@ -194,8 +191,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
+//            Intent i = new Intent(this, MainActivity.class);
+//            startActivity(i);
             showProgress(true);
-            CheckLogin c = new CheckLogin(this, this);
+            CheckLogin c = new CheckLogin(this);
             c.execute(email, password);
         }
     }

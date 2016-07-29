@@ -39,12 +39,7 @@ public class Tab3 extends Fragment {
     }
 
     public void logout() {
-        sp = getActivity().getSharedPreferences(LoginActivity.SHARED_PREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = sp.edit();
-        System.out.println(sp.getString("userId", null));
-        edit.clear();
-        edit.commit();
-        System.out.println(sp.getString("userId", null));
+
         getActivity().finish();
     }
 }

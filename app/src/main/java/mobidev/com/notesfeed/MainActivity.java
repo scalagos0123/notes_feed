@@ -1,5 +1,6 @@
 package mobidev.com.notesfeed;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -23,10 +24,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        Toolbar t = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(t);
+        Intent receiveUser = getIntent();
+        User currentUser = (User) receiveUser.getSerializableExtra("currentUser");
 
-        //Initializing the tablayout
+//        Putting to bundle so that all fragments can access it
+        savedInstanceState.putSerializable("currentUser", currentUser);
+
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.pager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
