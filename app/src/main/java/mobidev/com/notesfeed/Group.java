@@ -16,6 +16,7 @@ public class Group {
     private String group_id;
     private String group_name;
     ArrayList<User> group_members;
+    private int groupTotalMembers;
 
     public Group(String group_id, String group_name) {
         this.group_id = group_id;
@@ -37,10 +38,15 @@ public class Group {
 
     public void addGroup_member(User groupMember) {
         this.group_members.add(groupMember);
+        this.groupTotalMembers++;
     }
 
-    public int getGroupSize() {
-        return this.group_members.size();
+    public int getGroupTotalMembers() {
+        return this.groupTotalMembers;
+    }
+
+    public void setGroupTotalMembers(int totalMembers) {
+        this.groupTotalMembers = totalMembers;
     }
 
     public String getGroup_id() {

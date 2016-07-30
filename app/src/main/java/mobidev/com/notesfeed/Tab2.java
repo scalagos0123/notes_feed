@@ -64,17 +64,20 @@ public class Tab2 extends Fragment {
 
 //    Asynchronous task. Adding groups to the ArrayList groups
 
-    public class GroupsConnection extends AsyncTask<String, Void, Map<String, String>> {
+    public class GroupsConnection extends AsyncTask<String, Void, ArrayList<Map<String, String>>> {
 
         @Override
-        protected Map<String, String> doInBackground(String... params) {
+        protected ArrayList<Map<String, String>> doInBackground(String... params) {
             String user_id = "user_id=" + params[0];
             String link = "" + NotesFeedSession.SERVER_ADDRESS + "notesfeed/getgroups.php?" + user_id;
             byte[] user_id_bytes = user_id.getBytes();
 
             System.out.println("Sending data");
 
+            ArrayList<Map<String, String>> receivedFromServer = new ArrayList<>();
+
             Map<String, String> group = new LinkedHashMap<>();
+            Map<String, String> group_members = new LinkedHashMap<>();
 
             try {
                 URL url = new URL(link);
@@ -97,37 +100,48 @@ public class Tab2 extends Fragment {
                 JSONObject jsonResponse = new JSONObject(response.toString());
                 JSONArray group_id_array = jsonResponse.getJSONArray("group_id");
                 JSONArray group_name_array = jsonResponse.getJSONArray("group_name");
+                JSONArray group_total_members = jsonResponse.getJSONArray("group_total_members");
+
+//                JSONArray group_members_received = jsonResponse.getJSONArray("group_members");
 
                 for (int i = 0; i < group_name_array.length(); i++) {
                     group.put(group_id_array.getString(i), group_name_array.getString(i));
+                    group_members.put(group_id_array.getString(i), group_total_members.getString(i));
                 }
 
                 for (Map.Entry<String, String> keyValues : group.entrySet()) {
                     System.out.println(keyValues.getKey() + ": " + keyValues.getValue());
                 }
 
+                receivedFromServer.add(group);
+                receivedFromServer.add(group_members);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            return group;
+            return receivedFromServer;
         }
 
         @Override
-        protected void onPostExecute(Map<String, String> stringStringMap) {
+        protected void onPostExecute(ArrayList<Map<String, String>> stringStringMap) {
             super.onPostExecute(stringStringMap);
 
-            for (Map.Entry<String, String> groups_received : stringStringMap.entrySet()) {
+            int[] group_members = new int[100];
+            int position = 0;
+
+            for (Map.Entry<String, String> groups_total : stringStringMap.get(1).entrySet()) {
+                group_members[position] = Integer.parseInt(groups_total.getValue());
+                position++;
+            }
+
+            position = 0;
+
+            for (Map.Entry<String, String> groups_received : stringStringMap.get(0).entrySet()) {
                 Group g = new Group(groups_received.getKey(), groups_received.getValue());
-                User group_member = new User("1", "Shaun");
-                User group_member2 = new User("2", "Bendrhick");
-                User group_member3 = new User("3", "Kat");
-
-                g.addGroup_member(group_member);
-                g.addGroup_member(group_member2);
-                g.addGroup_member(group_member3);
-
+                g.setGroupTotalMembers(group_members[position]);
                 groups.add(g);
+                position++;
             }
 
             sampleListView.setAdapter(group_adapter);
