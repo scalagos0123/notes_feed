@@ -13,6 +13,8 @@ public class NotesFeedSession {
     public final String SHARED_PREFERENCES = "Session";
     public final String SESSION_USER_ID = "userId";
     public final String SESSION_USER_NAME = "user_fullname";
+    public final static String SERVER_ADDRESS = "http://192.168.254.109/";
+    public final static String SERVER_ADDRESS_ALTERNATE = "http://SHAUN-G501/";
 
     public NotesFeedSession(Context context) {
         this.context = context;

@@ -13,25 +13,15 @@ import java.util.Map;
  */
 public class Group {
 
-    public Map<String, String> groups;
-    private Context context;
     private String group_id;
     private String group_name;
-    private Map<Integer, String> group_members;
+    ArrayList<User> group_members;
 
-    public Group() {
-        this.group_members = new HashMap<>();
+    public Group(String group_id, String group_name) {
+        this.group_id = group_id;
+        this.group_name = group_name;
+        this.group_members = new ArrayList<User>();
     }
-
-//    private Map<String, String> getUserGroupsFromServer(String userId) {
-//        GroupsConnection userGroups = new GroupsConnection();
-//        userGroups.execute(userId);
-//        return groups;
-//    }
-//
-//    public void getGroupsByUser(String userId) {
-//        getUserGroupsFromServer(userId);
-//    }
 
     public String getGroup_name() {
         return group_name;
@@ -41,24 +31,20 @@ public class Group {
         this.group_name = group_name;
     }
 
-    public Map<Integer, String> getGroup_members() {
+    public ArrayList<User> getGroup_members() {
         return group_members;
     }
 
-    public void setGroup_members(Map<Integer, String> group_members) {
-        this.group_members = group_members;
-    }
-
-    public void addGroup_member(int userId, String group_member_name) {
-        group_members.put(userId, group_member_name);
+    public void addGroup_member(User groupMember) {
+        this.group_members.add(groupMember);
     }
 
     public int getGroupSize() {
-        return group_members.size();
+        return this.group_members.size();
     }
 
     public String getGroup_id() {
-        return group_id;
+        return this.group_id;
     }
 
     public void setGroup_id(String group_id) {

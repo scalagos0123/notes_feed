@@ -53,7 +53,12 @@ public class ListAdapter extends ArrayAdapter<Group> {
 
         h.group_title.setText(g.getGroup_name());
         System.out.println();
-        h.group_size.setText(g.getGroupSize() + " members");
+
+        if (g.getGroupSize() == 0) {
+            h.group_size.setText("No members in this group");
+        } else {
+            h.group_size.setText(g.getGroupSize() + " members");
+        }
 
         return convertView;
 

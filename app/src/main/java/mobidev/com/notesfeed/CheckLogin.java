@@ -46,7 +46,7 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
     protected Boolean doInBackground(String... params) {
         String username = params[0];
         String password = params[1];
-        String link = "http://192.168.254.101/notesfeed/getusers.php";
+        String link = "" + NotesFeedSession.SERVER_ADDRESS + "notesfeed/getusers.php";
 
         Map<String, String> loginValues = new LinkedHashMap<>();
         loginValues.put("email", username);
@@ -82,6 +82,8 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
             for (int c; (c = in.read()) >= 0;) {
                 check.append((char)c);
             }
+
+            System.out.println(check + "");
 
             /*
 
