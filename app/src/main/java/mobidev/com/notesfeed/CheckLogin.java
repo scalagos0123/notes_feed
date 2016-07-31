@@ -31,11 +31,11 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
     private LoginActivity activityMethods;
     private String userId;
     private String user_fullname;
-    SharedPreferences session;
 
     public CheckLogin(Context context, LoginActivity thisLoginActivity) {
         this.context = context;
         this.activityMethods = thisLoginActivity;
+
     }
 
     public boolean getResult() {
@@ -46,7 +46,7 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
     protected Boolean doInBackground(String... params) {
         String username = params[0];
         String password = params[1];
-        String link = "http://192.168.254.102/notesfeed/getusers.php";
+        String link = "" + NotesFeedSession.SERVER_ADDRESS + "notesfeed/getusers.php";
 
         Map<String, String> loginValues = new LinkedHashMap<>();
         loginValues.put("email", username);
@@ -83,6 +83,8 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
                 check.append((char)c);
             }
 
+            System.out.println(check + "");
+
             /*
 
             Since I've encoded the name to JSON, this is the current and effective way
@@ -114,21 +116,19 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
     protected void onPostExecute (Boolean result) {
         if (this.loginStatus == true) {
             activityMethods.showProgress(false);
-            session = context.getSharedPreferences(activityMethods.SHARED_PREFERENCES, context.MODE_PRIVATE);
-            SharedPreferences.Editor edit = session.edit();
 
-            edit.putString("userId", userId);
-            edit.putString("user_fullname", user_fullname);
-            edit.commit();
+            User currentUser = new User(this.userId, this.user_fullname);
 
-            System.out.println(session.getString("userId", null));
-            System.out.println(session.getString("user_fullname", null));
+            NotesFeedSession newSession = new NotesFeedSession(context);
+            newSession.startUserSession(this.userId, this.user_fullname);
 
             Intent i = new Intent (context, MainActivity.class);
+            i.putExtra("currentUser", currentUser);
             context.startActivity(i);
+
         } else {
             activityMethods.showProgress(false);
-            Toast.makeText(context, "User doesn't exist", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Login failed.", Toast.LENGTH_SHORT).show();
         }
     }
 }
