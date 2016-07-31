@@ -4,6 +4,7 @@ package mobidev.com.notesfeed;
  * Created by Debbie Co on 7/7/2016.
  */
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -52,6 +54,16 @@ public class Tab2 extends Fragment {
 
         view = inflater.inflate(R.layout.tab_fragment_2, container, false);
         sampleListView = (ListView) view.findViewById(R.id.listView);
+
+        sampleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Group itemOnList = (Group) parent.getItemAtPosition(position);
+
+                Intent groupActivity = new Intent();
+                groupActivity.putExtra("selectedGroup", itemOnList);
+            }
+        });
 
         NotesFeedSession sessionHandler = new NotesFeedSession(getActivity());
         GroupsConnection group_async = new GroupsConnection();

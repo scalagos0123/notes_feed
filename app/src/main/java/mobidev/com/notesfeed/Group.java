@@ -3,6 +3,7 @@ package mobidev.com.notesfeed;
 import android.content.Context;
 import android.support.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -11,7 +12,7 @@ import java.util.Map;
 /**
  * Created by Shaun on 7/24/2016.
  */
-public class Group {
+public class Group implements Serializable {
 
     private String group_id;
     private String group_name;
