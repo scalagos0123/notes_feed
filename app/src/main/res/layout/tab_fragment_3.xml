@@ -12,4 +12,10 @@
         android:text="Tab 3"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
 
+    <Button
+        android:id="@+id/sign_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign out"></Button>
+
 </RelativeLayout>

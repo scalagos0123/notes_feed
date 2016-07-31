@@ -113,7 +113,7 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
 
     protected void onPostExecute (Boolean result) {
         if (this.loginStatus == true) {
-
+            activityMethods.showProgress(false);
             session = context.getSharedPreferences(activityMethods.SHARED_PREFERENCES, context.MODE_PRIVATE);
             SharedPreferences.Editor edit = session.edit();
 
