@@ -66,11 +66,16 @@ public class Tab2 extends Fragment {
         });
 
         NotesFeedSession sessionHandler = new NotesFeedSession(getActivity());
-        GroupsConnection group_async = new GroupsConnection();
-        group_async.execute(getContext().getSharedPreferences(sessionHandler.SHARED_PREFERENCES, getActivity().MODE_PRIVATE).getString(sessionHandler.SESSION_USER_ID, null));
+//        GroupsConnection group_async = new GroupsConnection();
+//        group_async.execute(getContext().getSharedPreferences(sessionHandler.SHARED_PREFERENCES, getActivity().MODE_PRIVATE).getString(sessionHandler.SESSION_USER_ID, null));
 
         group_adapter = new ListAdapter(getActivity(), R.layout.group_list, groups);
 
+        for (int i = 0; i < 3; i++) {
+            group_adapter.add(new Group(i + "", "Dummy group #" + i));
+        }
+
+        sampleListView.setAdapter(group_adapter);
         return view;
     }
 
