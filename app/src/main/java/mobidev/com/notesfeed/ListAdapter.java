@@ -52,7 +52,6 @@ public class ListAdapter extends ArrayAdapter<Group> {
         convertView.setTag(h);
 
         h.group_title.setText(g.getGroup_name());
-        System.out.println();
 
         if (g.getGroupTotalMembers() == 0) {
 
