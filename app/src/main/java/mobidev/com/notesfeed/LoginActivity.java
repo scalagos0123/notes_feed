@@ -186,12 +186,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-//            Intent i = new Intent(this, MainActivity.class);
-//            startActivity(i);
+
             showProgress(true);
-            CheckLogin c = new CheckLogin(this, this);
-            c.execute(email, password);
+//            CheckLogin c = new CheckLogin(this, this);
+//            c.execute(email, password);
         }
+
+        Intent i = new Intent(this, MainActivity.class);
+        User u = new User("1", "Dummy User");
+        i.putExtra("currentUser", u);
+        startActivity(i);
+        showProgress(false);
     }
 
     public void toRegisterForm(View view) {

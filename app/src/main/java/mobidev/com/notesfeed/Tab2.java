@@ -15,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,6 +43,7 @@ public class Tab2 extends Fragment {
     View view;
     ListView sampleListView;
     ListAdapter group_adapter;
+//    private TextView save_button;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,21 +58,29 @@ public class Tab2 extends Fragment {
         view = inflater.inflate(R.layout.tab_fragment_2, container, false);
         sampleListView = (ListView) view.findViewById(R.id.listView);
 
+        groups.add(new Group("1", "Dummy group #1"));
+        groups.add(new Group("2", "Dummy group #2"));
+
+        NotesFeedSession sessionHandler = new NotesFeedSession(getActivity());
+//        GroupsConnection group_async = new GroupsConnection();
+//        group_async.execute(getContext().getSharedPreferences(sessionHandler.SHARED_PREFERENCES, getActivity().MODE_PRIVATE).getString(sessionHandler.SESSION_USER_ID, null));
+
+        group_adapter = new ListAdapter(getActivity(), R.layout.group_list, groups);
+        sampleListView.setAdapter(group_adapter);
+
         sampleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Group itemOnList = (Group) parent.getItemAtPosition(position);
+                System.out.println(itemOnList.getGroup_name());
+
+                TextView save_button = (TextView) view.findViewById(R.id.save_button);
+                save_button.setVisibility(View.GONE);
 
                 Intent groupActivity = new Intent();
                 groupActivity.putExtra("selectedGroup", itemOnList);
             }
         });
-
-        NotesFeedSession sessionHandler = new NotesFeedSession(getActivity());
-        GroupsConnection group_async = new GroupsConnection();
-        group_async.execute(getContext().getSharedPreferences(sessionHandler.SHARED_PREFERENCES, getActivity().MODE_PRIVATE).getString(sessionHandler.SESSION_USER_ID, null));
-
-        group_adapter = new ListAdapter(getActivity(), R.layout.group_list, groups);
 
         return view;
     }
