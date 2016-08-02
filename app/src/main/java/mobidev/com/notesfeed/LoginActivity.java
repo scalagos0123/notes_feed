@@ -192,11 +192,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //            c.execute(email, password);
         }
 
+        NotesFeedSession n = new NotesFeedSession(this);
+        n.startUserSession("1", "Dummy user");
         Intent i = new Intent(this, MainActivity.class);
-        User u = new User("1", "Dummy User");
-        i.putExtra("currentUser", u);
-        startActivity(i);
         showProgress(false);
+        startActivity(i);
     }
 
     public void toRegisterForm(View view) {

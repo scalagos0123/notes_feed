@@ -74,11 +74,9 @@ public class Tab2 extends Fragment {
                 Group itemOnList = (Group) parent.getItemAtPosition(position);
                 System.out.println(itemOnList.getGroup_name());
 
-                TextView save_button = (TextView) view.findViewById(R.id.save_button);
-                save_button.setVisibility(View.GONE);
-
-                Intent groupActivity = new Intent();
+                Intent groupActivity = new Intent(getContext(), GroupActivity.class);
                 groupActivity.putExtra("selectedGroup", itemOnList);
+                startActivity(groupActivity);
             }
         });
 
@@ -168,7 +166,7 @@ public class Tab2 extends Fragment {
             }
 
             sampleListView.setAdapter(group_adapter);
-            group_adapter.notifyDataSetChanged();
+//            group_adapter.notifyDataSetChanged();
 
         }
     }
