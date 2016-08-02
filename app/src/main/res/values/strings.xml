@@ -26,6 +26,11 @@
     <string name="heading_personal_info">Personal info</string>
     <string name="fname_personal_info">First name</string>
     <string name="lname_personal_info">Last name</string>
+    <string name="back">Back</string>
+    <string name="submit">Submit</string>
+    <string name="re_type_password">Re-type password</string>
+    <string name="confirm_password">Confirm Password:</string>
+    <string name="enter_new_password">Enter New Password:</string>
 
 
 </resources>
