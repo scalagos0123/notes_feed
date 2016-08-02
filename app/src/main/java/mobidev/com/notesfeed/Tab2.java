@@ -15,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,6 +43,7 @@ public class Tab2 extends Fragment {
     View view;
     ListView sampleListView;
     ListAdapter group_adapter;
+//    private TextView save_button;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,27 +58,28 @@ public class Tab2 extends Fragment {
         view = inflater.inflate(R.layout.tab_fragment_2, container, false);
         sampleListView = (ListView) view.findViewById(R.id.listView);
 
-        sampleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Group itemOnList = (Group) parent.getItemAtPosition(position);
-
-                Intent groupActivity = new Intent();
-                groupActivity.putExtra("selectedGroup", itemOnList);
-            }
-        });
+        groups.add(new Group("1", "Dummy group #1"));
+        groups.add(new Group("2", "Dummy group #2"));
 
         NotesFeedSession sessionHandler = new NotesFeedSession(getActivity());
 //        GroupsConnection group_async = new GroupsConnection();
 //        group_async.execute(getContext().getSharedPreferences(sessionHandler.SHARED_PREFERENCES, getActivity().MODE_PRIVATE).getString(sessionHandler.SESSION_USER_ID, null));
 
         group_adapter = new ListAdapter(getActivity(), R.layout.group_list, groups);
-
-        for (int i = 0; i < 3; i++) {
-            group_adapter.add(new Group(i + "", "Dummy group #" + i));
-        }
-
         sampleListView.setAdapter(group_adapter);
+
+        sampleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Group itemOnList = (Group) parent.getItemAtPosition(position);
+                System.out.println(itemOnList.getGroup_name());
+
+                Intent groupActivity = new Intent(getContext(), GroupActivity.class);
+                groupActivity.putExtra("selectedGroup", itemOnList);
+                startActivity(groupActivity);
+            }
+        });
+
         return view;
     }
 
@@ -162,7 +166,7 @@ public class Tab2 extends Fragment {
             }
 
             sampleListView.setAdapter(group_adapter);
-            group_adapter.notifyDataSetChanged();
+//            group_adapter.notifyDataSetChanged();
 
         }
     }
