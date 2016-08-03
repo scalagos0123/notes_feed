@@ -48,6 +48,13 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
         viewElements.notes_title.setText(notesList.get(position).getNotes_title());
         viewElements.notes_content.setText(notesList.get(position).getNotes_content());
 
+        viewElements.notes_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         convertView.setTag(viewElements);
         return convertView;
     }
