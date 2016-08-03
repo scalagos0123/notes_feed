@@ -6,40 +6,36 @@ package mobidev.com.notesfeed;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.ListViewAutoScrollHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 /**
  * Created by Belal on 2/3/2016.
  */
 
 //Our class extending fragment
-public class Tab3 extends Fragment {
+public class  Tab3 extends Fragment {
 
-    SharedPreferences sp;
 
-    //Overriden method onCreateView
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        //Returning the layout file after inflating
-        //Change R.layout.tab1 in you classes
         View view = inflater.inflate(R.layout.tab_fragment_3, container, false);
-        Button sign_out = (Button) view.findViewById(R.id.sign_out);
-        sign_out.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout();
-            }
-        });
+        populateListView(view);
         return view;
     }
 
-    public void logout() {
-
-        getActivity().finish();
-    }
+    private void populateListView(View v){
+        String[] myItems = {"Change Password", "Change Email", "Sign Out"};
+         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.da_item, myItems);
+         ListView list = (ListView) v.findViewById(R.id.listViewMain);
+         list.setAdapter(adapter);
+}
 }
