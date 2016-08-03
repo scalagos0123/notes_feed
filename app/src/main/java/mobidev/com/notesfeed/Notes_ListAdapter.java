@@ -36,5 +36,19 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
         }
     }
 
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        convertView = inflater.inflate(resource, parent, false);
 
+        ViewHolder viewElements = new ViewHolder();
+
+        viewElements.notes_title = (EditText) convertView.findViewById(R.id.notes_title);
+        viewElements.notes_content = (EditText) convertView.findViewById(R.id.edit_text_note);
+
+        viewElements.notes_title.setText(notesList.get(position).getNotes_title());
+        viewElements.notes_content.setText(notesList.get(position).getNotes_content());
+
+        convertView.setTag(viewElements);
+        return convertView;
+    }
 }

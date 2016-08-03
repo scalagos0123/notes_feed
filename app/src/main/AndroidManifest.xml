@@ -27,7 +27,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_personal_notes"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".GroupActivity"
             android:parentActivityName=".MainActivity"></activity>

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 /**
  * Created by Kat on 01/08/2016.
  */
-public class Notes  implements Serializable {
+public class Notes implements Serializable {
     private int notes_id;
     private String notes_title;
     private String notes_content;

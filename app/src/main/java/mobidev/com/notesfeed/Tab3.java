@@ -34,8 +34,9 @@ public class  Tab3 extends Fragment {
 
     private void populateListView(View v){
         String[] myItems = {"Change Password", "Change Email", "Sign Out"};
-         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.da_item, myItems);
-         ListView list = (ListView) v.findViewById(R.id.listViewMain);
-         list.setAdapter(adapter);
-}
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, myItems);
+
+        ListView list = (ListView) v.findViewById(R.id.listViewMain);
+        list.setAdapter(adapter);
+    }
 }
