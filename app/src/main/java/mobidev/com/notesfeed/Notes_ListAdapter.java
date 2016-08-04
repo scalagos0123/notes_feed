@@ -1,6 +1,7 @@
 package mobidev.com.notesfeed;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,13 +48,6 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
 
         viewElements.notes_title.setText(notesList.get(position).getNotes_title());
         viewElements.notes_content.setText(notesList.get(position).getNotes_content());
-
-        viewElements.notes_title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
         convertView.setTag(viewElements);
         return convertView;

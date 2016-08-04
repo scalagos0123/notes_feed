@@ -6,9 +6,12 @@ package mobidev.com.notesfeed;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -45,6 +48,21 @@ public class Tab1 extends Fragment {
         this.notes_list = (ListView) view.findViewById(R.id.notes_listview);
         Notes_ListAdapter notesAdapter = new Notes_ListAdapter(getContext(), R.layout.note_layout, notes);
         notes_list.setAdapter(notesAdapter);
+
+        notes_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Notes n = (Notes) parent.getItemAtPosition(position);
+                EditText e = (EditText) view.findViewById(R.id.notes_title);
+                System.out.println(e.getText().toString());
+
+                System.out.println(n.getNotes_title());
+
+                CardView note_actions = (CardView) view.findViewById(R.id.note_actions);
+                note_actions.setVisibility(View.INVISIBLE);
+            }
+        });
 
         //code for notes and stuff
 
