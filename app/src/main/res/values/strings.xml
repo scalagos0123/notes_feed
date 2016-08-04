@@ -31,6 +31,7 @@
     <string name="re_type_password">Re-type password</string>
     <string name="confirm_password">Confirm Password:</string>
     <string name="enter_new_password">Enter New Password:</string>
+    <string name="title_activity_create_group">Create Group</string>
 
 
 </resources>
