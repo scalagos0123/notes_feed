@@ -19,6 +19,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
     private Context context;
     private LayoutInflater inflater;
     private int resource;
+    private ArrayAdapter<Notes> notes_list = this;
 
     public Notes_ListAdapter(Context context, int resource, ArrayList<Notes> objects) {
         super(context, resource, objects);
@@ -41,12 +42,11 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         convertView = inflater.inflate(resource, parent, false);
 
         final ViewHolder viewElements = new ViewHolder();
         final Notes n = this.getItem(position);
-        final ArrayAdapter<Notes> notes_list = this;
         final int item_position = position;
 
         viewElements.note_action = (CardView) convertView.findViewById(R.id.note_actions);
@@ -61,20 +61,20 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
         viewElements.notes_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println(n.getNotes_title());
+                System.out.println("Selected item: "+ n.getNotes_title());
                 viewElements.note_action.setVisibility(View.VISIBLE);
-
-                for (int i = 0; i < notes_list.getCount(); i++) {
-                    System.out.println(notes_list.getItem(i).getNotes_title());
-                }
             }
         });
 
         viewElements.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notes_list.remove(notes_list.getItem(item_position));
-                notesList.remove(item_position);
+                notesList.remove(position);
+                notes_list.notifyDataSetChanged();
+
+                for (int i = 0; i < notesList.size(); i++) {
+                    System.out.println(notesList.get(i).getNotes_title());
+                }
             }
         });
 
