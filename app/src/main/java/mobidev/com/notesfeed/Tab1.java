@@ -5,6 +5,7 @@ package mobidev.com.notesfeed;
  */
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -48,8 +49,18 @@ public class Tab1 extends Fragment {
         //code for notes and stuff
 
         this.notes_list = (ListView) view.findViewById(R.id.notes_listview);
-        Notes_ListAdapter notesAdapter = new Notes_ListAdapter(getContext(), R.layout.note_layout, notes);
+        final Notes_ListAdapter notesAdapter = new Notes_ListAdapter(getContext(), R.layout.note_layout, notes);
         notes_list.setAdapter(notesAdapter);
+
+        FloatingActionButton addNote = (FloatingActionButton) view.findViewById(R.id.add_note);
+        addNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Notes n = new Notes(000, "", "");
+                notesAdapter.insert(n, 0);
+                notesAdapter.notifyDataSetChanged();
+            }
+        });
 
         return view;
 

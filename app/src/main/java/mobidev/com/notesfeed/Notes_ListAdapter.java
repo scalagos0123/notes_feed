@@ -74,6 +74,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
             @Override
             public void onClick(View v) {
                 notes_list.remove(notes_list.getItem(item_position));
+                notesList.remove(item_position);
             }
         });
 
