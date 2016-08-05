@@ -48,7 +48,7 @@
         android:layout_height="40dp"
         android:layout_width="match_parent"
         android:id="@+id/note_actions"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"

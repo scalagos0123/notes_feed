@@ -45,26 +45,11 @@ public class Tab1 extends Fragment {
         //Change R.layout.tab1 in you classes
         View view = inflater.inflate(R.layout.tab_fragment_1, container, false);
 
+        //code for notes and stuff
+
         this.notes_list = (ListView) view.findViewById(R.id.notes_listview);
         Notes_ListAdapter notesAdapter = new Notes_ListAdapter(getContext(), R.layout.note_layout, notes);
         notes_list.setAdapter(notesAdapter);
-
-        notes_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Notes n = (Notes) parent.getItemAtPosition(position);
-                EditText e = (EditText) view.findViewById(R.id.notes_title);
-                System.out.println(e.getText().toString());
-
-                System.out.println(n.getNotes_title());
-
-                CardView note_actions = (CardView) view.findViewById(R.id.note_actions);
-                note_actions.setVisibility(View.INVISIBLE);
-            }
-        });
-
-        //code for notes and stuff
 
         return view;
 
