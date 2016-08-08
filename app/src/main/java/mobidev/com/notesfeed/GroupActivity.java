@@ -1,11 +1,15 @@
 package mobidev.com.notesfeed;
 
+import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class GroupActivity extends AppCompatActivity {
+
+    private Group g = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -13,7 +17,8 @@ public class GroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Group g = (Group) getIntent().getSerializableExtra("selectedGroup");
+        g = (Group) getIntent().getSerializableExtra("selectedGroup");
+
         getSupportActionBar().setTitle(g.getGroup_name());
         getSupportActionBar().setElevation(0);
 
@@ -25,22 +30,11 @@ public class GroupActivity extends AppCompatActivity {
         vp.setAdapter(gp);
         tabs.setupWithViewPager(vp);
 
-//        tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//                vp.setCurrentItem(tab.getPosition());
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        });
-
     }
+
+    public Group getGroupData() {
+        return g;
+    }
+
+
 }

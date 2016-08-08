@@ -40,7 +40,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Sign in"
-                    android:textSize="25dp" />
+                    android:textSize="25dp"
+                    android:textStyle="bold"/>
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -87,11 +88,13 @@
                         android:layout_marginTop="16dp"
                         android:text="@string/action_sign_in_short"
                         android:textStyle="bold"
-                        android:layout_alignParentRight="true"/>
+                        android:layout_alignParentRight="true"
+                        android:background="@color/transparent" />
 
                     <Button
                         android:layout_width="wrap_content"
                         style="?android:textAppearanceSmall"
+                        android:background="@color/transparent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="@string/button_register"

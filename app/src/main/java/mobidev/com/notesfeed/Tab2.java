@@ -58,15 +58,15 @@ public class Tab2 extends Fragment {
         view = inflater.inflate(R.layout.tab_fragment_2, container, false);
         sampleListView = (ListView) view.findViewById(R.id.listView);
 
-        groups.add(new Group("1", "Dummy group #1"));
-        groups.add(new Group("2", "Dummy group #2"));
+//        groups.add(new Group("1", "Dummy group #1"));
+//        groups.add(new Group("2", "Dummy group #2"));
 
         NotesFeedSession sessionHandler = new NotesFeedSession(getActivity());
-//        GroupsConnection group_async = new GroupsConnection();
-//        group_async.execute(getContext().getSharedPreferences(sessionHandler.SHARED_PREFERENCES, getActivity().MODE_PRIVATE).getString(sessionHandler.SESSION_USER_ID, null));
+        GroupsConnection group_async = new GroupsConnection();
+        group_async.execute(getContext().getSharedPreferences(sessionHandler.SHARED_PREFERENCES, getActivity().MODE_PRIVATE).getString(sessionHandler.SESSION_USER_ID, null));
 
         group_adapter = new ListAdapter(getActivity(), R.layout.group_list, groups);
-        sampleListView.setAdapter(group_adapter);
+//        sampleListView.setAdapter(group_adapter);
 
         sampleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -85,7 +85,7 @@ public class Tab2 extends Fragment {
 
 //    Asynchronous task. Adding groups to the ArrayList groups
 
-    public class GroupsConnection extends AsyncTask<String, Void, ArrayList<Map<String, String>>> {
+    protected class GroupsConnection extends AsyncTask<String, Void, ArrayList<Map<String, String>>> {
 
         @Override
         protected ArrayList<Map<String, String>> doInBackground(String... params) {
@@ -166,7 +166,6 @@ public class Tab2 extends Fragment {
             }
 
             sampleListView.setAdapter(group_adapter);
-//            group_adapter.notifyDataSetChanged();
 
         }
     }

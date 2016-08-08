@@ -39,7 +39,6 @@ public class Group implements Serializable {
 
     public void addGroup_member(User groupMember) {
         this.group_members.add(groupMember);
-        this.groupTotalMembers++;
     }
 
     public int getGroupTotalMembers() {

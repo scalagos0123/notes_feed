@@ -24,9 +24,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        User currentUser = (User) getIntent().getSerializableExtra("currentUser");
-//        System.out.println(currentUser.getUserId());
-
 //        Putting to bundle so that all fragments can access it
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);

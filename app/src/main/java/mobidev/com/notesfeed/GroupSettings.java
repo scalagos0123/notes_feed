@@ -13,12 +13,15 @@ import android.widget.TextView;
  */
 public class GroupSettings extends Fragment {
 
+    private Group g = null;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GroupActivity activity = (GroupActivity) getActivity();
+        g = activity.getGroupData();
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.group_settings_tab, container, false);
