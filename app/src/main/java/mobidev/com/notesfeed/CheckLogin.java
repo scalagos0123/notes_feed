@@ -31,6 +31,8 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
     private LoginActivity activityMethods;
     private String userId;
     private String user_fullname;
+    private String user_email;
+    private String user_password;
 
     public CheckLogin(Context context, LoginActivity thisLoginActivity) {
         this.context = context;
@@ -96,12 +98,16 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
             JSONArray user_name = receivedJson.getJSONArray("user_name");
             JSONArray condition = receivedJson.getJSONArray("condition");
             JSONArray user_id = receivedJson.getJSONArray("user_id");
+            JSONArray user_email = receivedJson.getJSONArray("user_email");
+            JSONArray user_password = receivedJson.getJSONArray("user_password");
 
 //            Checking condition from JSON
 
             if (condition.getString(0).equals("true")) {
                 this.user_fullname = user_name.getString(0);
                 this.userId = user_id.getString(0);
+                this.user_email = user_email.getString(0);
+                this.user_password = user_password.getString(0);
                 checkStatus = true;
             }
 
@@ -120,7 +126,7 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
             User currentUser = new User(this.userId, this.user_fullname);
 
             NotesFeedSession newSession = new NotesFeedSession(context);
-            newSession.startUserSession(this.userId, this.user_fullname);
+            newSession.startUserSession(this.userId, this.user_fullname, this.user_password, this.user_email);
 
             Intent i = new Intent (context, MainActivity.class);
             i.putExtra("currentUser", currentUser);
