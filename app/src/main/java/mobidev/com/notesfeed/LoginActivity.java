@@ -193,7 +193,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         NotesFeedSession n = new NotesFeedSession(this);
-        n.startUserSession("1", "Dummy user");
+        n.startUserSession("1", "Dummy user", "12345678", "dummyuser@someemail.com");
         Intent i = new Intent(this, MainActivity.class);
         showProgress(false);
         startActivity(i);
