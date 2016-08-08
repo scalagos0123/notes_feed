@@ -27,15 +27,23 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_personal_notes"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".GroupActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SignUp"
             android:label="Register"
             android:parentActivityName=".LoginActivity" />
+        <activity
+            android:name=".CreateGroup"
+            android:label="@string/title_activity_create_group"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mobidev.com.notesfeed.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
