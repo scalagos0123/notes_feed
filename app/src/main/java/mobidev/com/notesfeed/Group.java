@@ -18,11 +18,20 @@ public class Group implements Serializable {
     private String group_name;
     ArrayList<User> group_members;
     private int groupTotalMembers;
+    private String group_moderator;
 
     public Group(String group_id, String group_name) {
         this.group_id = group_id;
         this.group_name = group_name;
         this.group_members = new ArrayList<User>();
+    }
+
+    public void setGroup_moderator (String user_id) {
+        this.group_moderator = user_id;
+    }
+
+    public String getGroup_moderator() {
+        return group_moderator;
     }
 
     public String getGroup_name() {
