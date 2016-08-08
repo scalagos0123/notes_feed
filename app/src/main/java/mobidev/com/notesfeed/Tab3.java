@@ -37,6 +37,13 @@ public class Tab3 extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String itemSelected = (String) parent.getItemAtPosition(position);
 
+                /*
+
+                if you want to get the current user's data, initialize kayo ng NotesFeedSession class, tapos parameter nya, call nyo lang getContext() method.
+                There are methods in NotesFeedSession to get the user data para maiwasan mag hard code
+
+                */
+
                 if (itemSelected.equals(myItems[0])) {
 
 //                    start the intent here kung change password yung sinelect
