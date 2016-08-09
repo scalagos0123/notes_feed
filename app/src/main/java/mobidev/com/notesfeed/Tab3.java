@@ -44,9 +44,13 @@ public class Tab3 extends Fragment {
 
                 */
 
+
                 if (itemSelected.equals(myItems[0])) {
 
 //                    start the intent here kung change password yung sinelect
+
+                   NotesFeedSession n = new NotesFeedSession(getContext());
+
 
                 } else if (itemSelected.equals(myItems[1])) {
 

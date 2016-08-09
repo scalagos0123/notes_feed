@@ -8,39 +8,6 @@
     tools:context="mobidev.com.notesfeed.CreateGroup">
 
     <include layout="@layout/content_create_group" />
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
 
-            <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_marginBottom="30dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Create Group"
-                android:textSize="20dp"
-                android:layout_marginBottom="10dp"
-                android:textColor="@color/abc_primary_text_material_light"></TextView>
-
-                <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                android:text="Enter Group Name"/>
-
-
-            </android.support.v7.widget.CardView>
-
-        </LinearLayout>
-
-
-    </ScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

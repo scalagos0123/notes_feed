@@ -12,4 +12,81 @@
     tools:context="mobidev.com.notesfeed.CreateGroup"
     tools:showIn="@layout/activity_create_group">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:id="@+id/scrollView"
+        android:fillViewport="false">
+
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_alignParentStart="true">
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="30dp"
+            android:id="@+id/view">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Enter Group Name"
+                android:id="@+id/group_name"
+                />
+
+        </android.support.v7.widget.CardView>
+
+     <!--   <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CREATE GROUP"
+            android:onClick="createGroup"
+            android:layout_below="@+id/view"
+            android:layout_alignParentStart="true" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="BACK"
+            android:onClick="createGroup"
+            android:layout_below="@+id/view"
+            android:layout_alignParentStart="true" />-->
+
+        <Button
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/back"
+            android:background="@color/whiteIcon"
+            android:id="@+id/button1"
+            android:layout_alignTop="@+id/button"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="50dp"
+            android:layout_alignBottom="@+id/button" />
+        <Button
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CREATE GROUP"
+            android:id="@+id/button"
+            android:background="@color/whiteIcon"
+            android:onClick="createGroup"
+            android:layout_below="@+id/view"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="46dp" />
+
+    </RelativeLayout>
+
+
+
 </RelativeLayout>

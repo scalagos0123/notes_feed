@@ -45,6 +45,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="mobidev.com.notesfeed.MainActivity" />
         </activity>
+
     </application>
 
 </manifest>

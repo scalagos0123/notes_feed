@@ -6,4 +6,5 @@
     <color name="colorNotes">#ffffb3</color>
     <color name="transparent">#0000</color>
     <color name="whiteIcon">#FFF</color>
+    <color name="redLine">#ff0000</color>
 </resources>
