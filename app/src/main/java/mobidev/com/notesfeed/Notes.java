@@ -10,14 +10,13 @@ public class Notes implements Serializable {
     private int notes_id;
     private String notes_title;
     private String notes_content;
-    private String note_owner;
-
+    private User note_owner;
 
     public Notes(int notes_id, String notes_title, String notes_content) {
         this.notes_id = notes_id;
         this.notes_title = notes_title;
         this.notes_content = notes_content;
-        this.note_owner = "";
+        this.note_owner = null;
     }
 
     public void setNotes_id(int notes_id) {
@@ -32,11 +31,11 @@ public class Notes implements Serializable {
         this.notes_content = notes_content;
     }
 
-    public String getNote_owner() {
+    public User getNote_owner() {
         return note_owner;
     }
 
-    public void setNote_owner(String note_owner) {
+    public void setNote_owner(User note_owner) {
         this.note_owner = note_owner;
     }
 

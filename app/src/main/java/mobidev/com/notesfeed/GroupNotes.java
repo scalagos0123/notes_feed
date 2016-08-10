@@ -3,6 +3,7 @@ package mobidev.com.notesfeed;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,12 +28,15 @@ public class GroupNotes extends Fragment {
     private ArrayList<Notes> groupNotes;
     private ListView notesListView;
     private Notes_ListAdapter groupNotesAdapter;
+    private FloatingActionButton fab;
+    private int last_noteId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         groupNotes = new ArrayList<>();
+        last_noteId = 0;
 
         GroupActivity activity = (GroupActivity) getActivity();
         g = activity.getGroupData();
@@ -48,6 +52,21 @@ public class GroupNotes extends Fragment {
 
         GetGroupNotes g = new GetGroupNotes();
         g.execute(this.g.getGroup_id());
+
+        fab = (FloatingActionButton) view.findViewById(R.id.add_note_group);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NotesFeedSession userData = new NotesFeedSession(getContext());
+                Notes newNote = new Notes(last_noteId, "", "");
+                newNote.setNote_owner(new User(userData.getUserId(), userData.getUserFullName()));
+                AddGroupNote a = new AddGroupNote();
+                a.execute(newNote);
+
+                groupNotes.add(0, newNote);
+                groupNotesAdapter.notifyDataSetChanged();
+            }
+        });
 
         return view;
     }
@@ -78,11 +97,18 @@ public class GroupNotes extends Fragment {
                 JSONArray notesId = jsonResponse.getJSONArray("notesId");
                 JSONArray notesTitle = jsonResponse.getJSONArray("notesTitle");
                 JSONArray notesContent = jsonResponse.getJSONArray("notesContent");
-                JSONArray noteOwner = jsonResponse.getJSONArray("noteOwner");
+                JSONObject noteOwner = jsonResponse.getJSONObject("noteOwner");
+                JSONArray userId = noteOwner.getJSONArray("userId");
+                JSONArray user_fullname = noteOwner.getJSONArray("user_fullname");
+
+                int getLastId = Integer.parseInt(notesId.getString(notesId.length() - 1));
+                last_noteId = getLastId + 1;
+                System.out.println(last_noteId);
 
                 for (int i = 0; i < notesTitle.length(); i++) {
                     Notes groupNote = new Notes(Integer.parseInt(notesId.getString(i)), notesTitle.getString(i), notesContent.getString(i));
-                    groupNote.setNote_owner(noteOwner.getString(i));
+                    User noteowner = new User(userId.getString(i), user_fullname.getString(i));
+                    groupNote.setNote_owner(noteowner);
                     groupNotes.add(groupNote);
                 }
 
@@ -97,6 +123,51 @@ public class GroupNotes extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             notesListView.setAdapter(groupNotesAdapter);
+        }
+    }
+
+    protected class AddGroupNote extends AsyncTask<Notes, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Notes... params) {
+            Notes noteToAdd = params[0];
+            int flag = 3;
+            String link = NotesFeedSession.SERVER_ADDRESS + "notesfeed/note_actions.php";
+            String noteData = "note_id=" + noteToAdd.getNotes_id() + "&note_title=" + noteToAdd.getNotes_title() + "&note_content=" + noteToAdd.getNotes_content() + "&flag=" + flag + "&user_id=" + noteToAdd.getNote_owner().getUserId() + "&group_id=" + g.getGroup_id();
+
+            byte[] noteDataBytes = noteData.getBytes();
+
+            System.out.println("Adding new note");
+
+            boolean status = false;
+
+            try {
+                URL url = new URL(link);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                conn.getOutputStream().write(noteDataBytes);
+
+                System.out.println("Note sent");
+
+                Reader outputConnection = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuffer outputConnectionReader = new StringBuffer();
+
+                for (int c; (c = outputConnection.read()) >= 0;) {
+                    outputConnectionReader.append((char)c);
+                }
+
+                if (outputConnectionReader.toString().equals("added")) {
+                    status = true;
+                } else {
+                    System.out.println(outputConnectionReader);
+                }
+
+            } catch (Exception e) {
+                System.out.println("Adding failed");
+                e.printStackTrace();
+            }
+
+            return status;
         }
     }
 }
