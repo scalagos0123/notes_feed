@@ -1,6 +1,8 @@
 package mobidev.com.notesfeed;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,9 +13,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -55,7 +63,6 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
         final ViewHolder viewElements = new ViewHolder();
         final Notes n = this.getItem(position);
         final int item_position = position;
-        final Notes selectedNote = this.getItem(position);
 
         viewElements.note_owner = (TextView) convertView.findViewById(R.id.note_owner);
         viewElements.note_action = (CardView) convertView.findViewById(R.id.note_actions);
@@ -90,6 +97,21 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
             }
         });
 
+        viewElements.save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (n.getNote_owner().equals("")) {
+//                    do nothing
+                } else {
+                    n.setNotes_title(viewElements.notes_title.getText().toString());
+                    n.setNotes_content(viewElements.notes_content.getText().toString());
+                    UpdateNote thisAction = new UpdateNote(context);
+                    thisAction.execute(n);
+                    viewElements.note_action.setVisibility(View.GONE);
+                }
+            }
+        });
+
         viewElements.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,5 +126,67 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
 
 //        convertView.setTag(viewElements);
         return convertView;
+    }
+
+    private class UpdateNote extends AsyncTask<Notes, Void, Boolean> {
+
+        private Context c;
+
+        public UpdateNote(Context c) {
+            this.c = c;
+        }
+
+        @Override
+        protected Boolean doInBackground(Notes... params) {
+
+            Notes selectedNote = params[0];
+            int flag = 1;
+            String link = NotesFeedSession.SERVER_ADDRESS + "notesfeed/note_actions.php";
+            String noteData = "note_id=" + selectedNote.getNotes_id() + "&note_title=" + selectedNote.getNotes_title() + "&note_content=" + selectedNote.getNotes_content() + "&flag=" + flag;
+
+            byte[] noteDataBytes = noteData.getBytes();
+
+            System.out.println("Updating note");
+
+            boolean status = false;
+
+            try {
+                URL url = new URL(link);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                conn.getOutputStream().write(noteDataBytes);
+
+                System.out.println("Note sent");
+
+                Reader outputConnection = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuffer outputConnectionReader = new StringBuffer();
+
+                for (int c; (c = outputConnection.read()) >= 0;) {
+                    outputConnectionReader.append((char)c);
+                }
+
+                if (outputConnectionReader.toString().equals("updated")) {
+                    status = true;
+                } else {
+                    System.out.println(outputConnectionReader);
+                }
+
+            } catch (Exception e) {
+                System.out.println("Update failed");
+                e.printStackTrace();
+            }
+
+            return status;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+
+            if (aBoolean == true) {
+                Toast.makeText(c, "Note's updated!", Toast.LENGTH_SHORT);
+            }
+        }
     }
 }
