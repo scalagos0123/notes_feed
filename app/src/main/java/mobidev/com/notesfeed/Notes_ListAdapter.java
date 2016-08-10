@@ -101,7 +101,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
             @Override
             public void onClick(View v) {
                 if (n.getNote_owner().equals("")) {
-//                    do nothing
+//                    integrate the SQLite Database part here
                 } else {
                     n.setNotes_title(viewElements.notes_title.getText().toString());
                     n.setNotes_content(viewElements.notes_content.getText().toString());
