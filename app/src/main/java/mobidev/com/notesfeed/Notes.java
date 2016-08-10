@@ -17,6 +17,7 @@ public class Notes implements Serializable {
         this.notes_id = notes_id;
         this.notes_title = notes_title;
         this.notes_content = notes_content;
+        this.note_owner = "";
     }
 
     public void setNotes_id(int notes_id) {

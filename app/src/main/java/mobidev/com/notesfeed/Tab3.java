@@ -23,8 +23,6 @@ import android.widget.ListView;
 //Our class extending fragment
 public class  Tab3 extends Fragment {
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment_3, container, false);
