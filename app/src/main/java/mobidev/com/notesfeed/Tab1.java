@@ -3,6 +3,7 @@ package mobidev.com.notesfeed;
 /**
  * Created by Debbie Co on 7/7/2016.
  */
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -65,5 +66,38 @@ public class Tab1 extends Fragment {
         return view;
 
 
+    }
+
+    private class AddNote extends AsyncTask<Notes, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Notes... params) {
+
+            /*
+
+            Execute the updating of a note here.
+            To get the note, initialize kayo ng Notes variable, tapos kunin nyo yung note via params
+
+            Ex. params[0];
+            params kasi yung tinatanggap ng .execute method ng AsyncTask is an array of a data type or a class na nakalagay (in this case, Notes nilagay ko)
+
+            No need to implement save and delete in Tab1. See note below:
+
+            * Saving and Deleting a note, nakalagay sa Notes_ListAdapter, in their respective doInBackground methods (Saving is the UpdateNote class, then Deleting is DeleteNote)
+            * Wala na kayo gagawin sa ClickListeners. I've set them to adapt to the note that you want to modify.
+            * Yung pag-save and pag-delete, ilalagay nyo dun sa may else part (may nilagay akong if(selectedNote.getNote_Owner() != null) condition. Dun nyo ilagay sa else yung updating, and deleting the local database
+
+             */
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+//            what to do after the adding is complete
+//            this is optional
+        }
     }
 }
