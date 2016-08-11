@@ -101,21 +101,20 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
         viewElements.save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (n.getNote_owner().equals("")) {
-//                    integrate the SQLite Database part here
-                } else {
-                    n.setNotes_title(viewElements.notes_title.getText().toString());
-                    n.setNotes_content(viewElements.notes_content.getText().toString());
-                    UpdateNote thisAction = new UpdateNote(context);
-                    thisAction.execute(n);
-                    viewElements.note_action.setVisibility(View.GONE);
-                }
+
+                n.setNotes_title(viewElements.notes_title.getText().toString());
+                n.setNotes_content(viewElements.notes_content.getText().toString());
+                UpdateNote thisAction = new UpdateNote(context);
+                thisAction.execute(n);
+                viewElements.note_action.setVisibility(View.GONE);
+
             }
         });
 
         viewElements.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 DeleteNote d = new DeleteNote(getContext());
                 d.execute(n);
             }
@@ -137,44 +136,53 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
         protected Boolean doInBackground(Notes... params) {
 
             Notes selectedNote = params[0];
-            int flag = 1;
-            String link = NotesFeedSession.SERVER_ADDRESS + "notesfeed/note_actions.php";
-            String noteData = "note_id=" + selectedNote.getNotes_id() + "&note_title=" + selectedNote.getNotes_title() + "&note_content=" + selectedNote.getNotes_content() + "&flag=" + flag;
-
-            byte[] noteDataBytes = noteData.getBytes();
-
-            System.out.println("Updating note");
-
             boolean status = false;
 
-            try {
-                URL url = new URL(link);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setDoOutput(true);
-                conn.getOutputStream().write(noteDataBytes);
+            if (selectedNote.getNote_owner() != null) {
 
-                System.out.println("Note sent");
+                int flag = 1;
+                String link = NotesFeedSession.SERVER_ADDRESS + "notesfeed/note_actions.php";
+                String noteData = "note_id=" + selectedNote.getNotes_id() + "&note_title=" + selectedNote.getNotes_title() + "&note_content=" + selectedNote.getNotes_content() + "&flag=" + flag;
 
-                Reader outputConnection = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                StringBuffer outputConnectionReader = new StringBuffer();
+                byte[] noteDataBytes = noteData.getBytes();
 
-                for (int c; (c = outputConnection.read()) >= 0;) {
-                    outputConnectionReader.append((char)c);
+                System.out.println("Updating note");
+
+                try {
+                    URL url = new URL(link);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setDoOutput(true);
+                    conn.getOutputStream().write(noteDataBytes);
+
+                    System.out.println("Note sent");
+
+                    Reader outputConnection = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuffer outputConnectionReader = new StringBuffer();
+
+                    for (int c; (c = outputConnection.read()) >= 0; ) {
+                        outputConnectionReader.append((char) c);
+                    }
+
+                    if (outputConnectionReader.toString().equals("updated")) {
+                        status = true;
+                    } else {
+                        System.out.println(outputConnectionReader);
+                    }
+
+                } catch (Exception e) {
+                    System.out.println("Update failed");
+                    e.printStackTrace();
                 }
+            } else {
 
-                if (outputConnectionReader.toString().equals("updated")) {
-                    status = true;
-                } else {
-                    System.out.println(outputConnectionReader);
-                }
+//                Integrate the SQLite Database here
+//                Query should be inserted here
 
-            } catch (Exception e) {
-                System.out.println("Update failed");
-                e.printStackTrace();
             }
 
             return status;
+
         }
 
         @Override
@@ -197,45 +205,54 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
 
         @Override
         protected Boolean doInBackground(Notes... params) {
+
             Notes selectedNote = params[0];
-            int flag = 2;
-            String link = NotesFeedSession.SERVER_ADDRESS + "notesfeed/note_actions.php";
-            String noteData = "note_id=" + selectedNote.getNotes_id() + "&note_title=" + selectedNote.getNotes_title() + "&note_content=" + selectedNote.getNotes_content() + "&flag=" + flag;
-
-            byte[] noteDataBytes = noteData.getBytes();
-
-            System.out.println("Deleting note");
-
             boolean status = false;
 
-            try {
-                URL url = new URL(link);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setDoOutput(true);
-                conn.getOutputStream().write(noteDataBytes);
+            if (selectedNote.getNote_owner() != null) {
+                int flag = 2;
 
-                System.out.println("Note sent");
+                String link = NotesFeedSession.SERVER_ADDRESS + "notesfeed/note_actions.php";
+                String noteData = "note_id=" + selectedNote.getNotes_id() + "&note_title=" + selectedNote.getNotes_title() + "&note_content=" + selectedNote.getNotes_content() + "&flag=" + flag;
 
-                Reader outputConnection = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                StringBuffer outputConnectionReader = new StringBuffer();
+                byte[] noteDataBytes = noteData.getBytes();
 
-                for (int c; (c = outputConnection.read()) >= 0;) {
-                    outputConnectionReader.append((char)c);
+                System.out.println("Deleting note");
+
+                try {
+                    URL url = new URL(link);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setDoOutput(true);
+                    conn.getOutputStream().write(noteDataBytes);
+
+                    System.out.println("Note sent");
+
+                    Reader outputConnection = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuffer outputConnectionReader = new StringBuffer();
+
+                    for (int c; (c = outputConnection.read()) >= 0; ) {
+                        outputConnectionReader.append((char) c);
+                    }
+
+                    if (outputConnectionReader.toString().equals("deleted")) {
+                        status = true;
+                    } else {
+                        System.out.println(outputConnectionReader);
+                    }
+
+                } catch (Exception e) {
+                    System.out.println("Delete failed");
+                    e.printStackTrace();
                 }
 
-                if (outputConnectionReader.toString().equals("deleted")) {
-                    status = true;
-                } else {
-                    System.out.println(outputConnectionReader);
-                }
-
-            } catch (Exception e) {
-                System.out.println("Delete failed");
-                e.printStackTrace();
+            } else {
+//                Integrate the SQLite Database here
+//                Perform the delete statement strictly here
             }
 
             return status;
+
         }
 
         @Override

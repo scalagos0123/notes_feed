@@ -36,6 +36,7 @@ public class Tab3 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String itemSelected = (String) parent.getItemAtPosition(position);
+                NotesFeedSession n = new NotesFeedSession(getContext());
 
                 /*
 
@@ -48,17 +49,17 @@ public class Tab3 extends Fragment {
                 if (itemSelected.equals(myItems[0])) {
 
 //                    start the intent here kung change password yung sinelect
+                    n = new NotesFeedSession(getContext());
 
-                   NotesFeedSession n = new NotesFeedSession(getContext());
 
 
                 } else if (itemSelected.equals(myItems[1])) {
 
 //                    start the intent here kung change email yung sinelect
-                    NotesFeedSession n = new NotesFeedSession(getContext());
+                    n = new NotesFeedSession(getContext());
                 } else if (itemSelected.equals(myItems[2])) {
 //                    Don't mess this part
-                    NotesFeedSession n = new NotesFeedSession(getContext());
+                    n = new NotesFeedSession(getContext());
                     n.endUserSession();
                     getActivity().finish();
                 }
