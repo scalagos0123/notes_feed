@@ -55,7 +55,7 @@ public class Tab3 extends Fragment {
                 } else if (itemSelected.equals(myItems[1])) {
 
 //                    start the intent here kung change email yung sinelect
-
+                    NotesFeedSession n = new NotesFeedSession(getContext());
                 } else if (itemSelected.equals(myItems[2])) {
 //                    Don't mess this part
                     NotesFeedSession n = new NotesFeedSession(getContext());
