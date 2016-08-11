@@ -46,6 +46,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="mobidev.com.notesfeed.MainActivity" />
         </activity>
+        <activity android:name=".ChangeEmail"
+            android:label="Change Email"
+            android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".ChangePassword"
+            android:label="Change Password"
+            android:parentActivityName=".MainActivity"></activity>
 
     </application>
 
