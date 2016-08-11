@@ -94,6 +94,7 @@ public class GroupNotes extends Fragment {
                 System.out.println(responseBuilder.toString());
 
                 JSONObject jsonResponse = new JSONObject(responseBuilder.toString());
+                JSONArray notesIdMax = jsonResponse.getJSONArray("notesIdMax");
                 JSONArray notesId = jsonResponse.getJSONArray("notesId");
                 JSONArray notesTitle = jsonResponse.getJSONArray("notesTitle");
                 JSONArray notesContent = jsonResponse.getJSONArray("notesContent");
@@ -101,7 +102,7 @@ public class GroupNotes extends Fragment {
                 JSONArray userId = noteOwner.getJSONArray("userId");
                 JSONArray user_fullname = noteOwner.getJSONArray("user_fullname");
 
-                int getLastId = Integer.parseInt(notesId.getString(notesId.length() - 1));
+                int getLastId = Integer.parseInt(notesIdMax.getString(0));
                 last_noteId = getLastId + 1;
                 System.out.println(last_noteId);
 

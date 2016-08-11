@@ -15,7 +15,7 @@ public class NotesFeedSession {
     public final String SESSION_USER_NAME = "user_fullname";
     public final String SESSION_USER_PASSWORD = "user_password";
     public final String SESSION_USER_EMAIL = "user_email";
-    public final static String SERVER_ADDRESS = "http://192.168.254.105/";
+    public final static String SERVER_ADDRESS = "http://172.20.10.6/";
     public final static String SERVER_ADDRESS_ALTERNATE = "http://SHAUN-G501/";
 
     public NotesFeedSession(Context context) {

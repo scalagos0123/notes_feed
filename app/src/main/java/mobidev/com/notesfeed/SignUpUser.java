@@ -35,7 +35,7 @@ public class SignUpUser extends AsyncTask<String, Void, Boolean> {
     protected Boolean doInBackground(String... params) {
         String email = (String) params[0];
         String password = (String) params[1];
-        String link = "http://192.168.254.102/notesfeed/registeruser.php";
+        String link = NotesFeedSession.SERVER_ADDRESS + "/notesfeed/registeruser.php";
 
         Map<String, String> person_info = new LinkedHashMap<>();
         person_info.put("email", email);
