@@ -18,7 +18,7 @@ public class Group implements Serializable {
     private String group_name;
     ArrayList<User> group_members;
     private int groupTotalMembers;
-    private String group_moderator;
+    private User group_moderator;
 
     public Group(String group_id, String group_name) {
         this.group_id = group_id;
@@ -26,11 +26,11 @@ public class Group implements Serializable {
         this.group_members = new ArrayList<User>();
     }
 
-    public void setGroup_moderator (String user_id) {
-        this.group_moderator = user_id;
+    public void setGroup_moderator (User moderatorObject) {
+        this.group_moderator = moderatorObject;
     }
 
-    public String getGroup_moderator() {
+    public User getGroup_moderator() {
         return group_moderator;
     }
 

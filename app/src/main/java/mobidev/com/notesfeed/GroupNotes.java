@@ -135,7 +135,7 @@ public class GroupNotes extends Fragment {
             String link = NotesFeedSession.SERVER_ADDRESS + "notesfeed/note_actions.php";
             String noteData = "note_id=" + noteToAdd.getNotes_id() + "&note_title=" + noteToAdd.getNotes_title() + "&note_content=" + noteToAdd.getNotes_content() + "&flag=" + flag + "&user_id=" + noteToAdd.getNote_owner().getUserId() + "&group_id=" + g.getGroup_id();
 
-            System.out.println("note_id=" + noteToAdd.getNotes_id() + "\n &note_title=" + noteToAdd.getNotes_title() + "\n &note_content=" + noteToAdd.getNotes_content() + "\n&flag=" + flag + "\n&user_id=" + noteToAdd.getNote_owner().getUserId() + "\n&group_id=" + g.getGroup_id());
+            System.out.println("note_id=" + noteToAdd.getNotes_id() + "\n&note_title=" + noteToAdd.getNotes_title() + "\n&note_content=" + noteToAdd.getNotes_content() + "\n&flag=" + flag + "\n&user_id=" + noteToAdd.getNote_owner().getUserId() + "\n&group_id=" + g.getGroup_id());
 
             byte[] noteDataBytes = noteData.getBytes();
 
@@ -161,6 +161,7 @@ public class GroupNotes extends Fragment {
 
                 if (outputConnectionReader.toString().equals("added")) {
                     status = true;
+                    last_noteId++;
                 } else {
                     System.out.println(outputConnectionReader);
                 }

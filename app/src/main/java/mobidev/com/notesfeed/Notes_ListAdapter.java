@@ -58,7 +58,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         convertView = inflater.inflate(resource, parent, false);
 
         final ViewHolder viewElements = new ViewHolder();
@@ -104,9 +104,9 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
 
                 n.setNotes_title(viewElements.notes_title.getText().toString());
                 n.setNotes_content(viewElements.notes_content.getText().toString());
-                UpdateNote thisAction = new UpdateNote(context);
+                UpdateNote thisAction = new UpdateNote(position);
                 thisAction.execute(n);
-                viewElements.note_action.setVisibility(View.GONE);
+                viewElements.note_action.setVisibility(View.INVISIBLE);
 
             }
         });
@@ -114,8 +114,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
         viewElements.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                DeleteNote d = new DeleteNote(getContext());
+                DeleteNote d = new DeleteNote(position);
                 d.execute(n);
             }
         });
@@ -127,9 +126,10 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
     private class UpdateNote extends AsyncTask<Notes, Void, Boolean> {
 
         private Context c;
+        private int item_position;
 
-        public UpdateNote(Context c) {
-            this.c = c;
+        public UpdateNote(int item_position) {
+            this.item_position = item_position;
         }
 
         @Override
@@ -187,10 +187,9 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
 
             if (aBoolean == true) {
-                Toast.makeText(c, "Note's updated!", Toast.LENGTH_SHORT);
+                Toast.makeText(context, "Note's updated!", Toast.LENGTH_SHORT);
             }
         }
     }
@@ -198,16 +197,20 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
     private class DeleteNote extends AsyncTask<Notes, Void, Boolean> {
 
         private Context c;
+        private boolean status;
+        private int item_position;
 
-        public DeleteNote(Context c) {
+        public DeleteNote(int item_position) {
+            this.item_position = item_position;
             this.c = c;
+            status = false;
         }
 
         @Override
         protected Boolean doInBackground(Notes... params) {
 
             Notes selectedNote = params[0];
-            boolean status = false;
+            status = false;
 
             if (selectedNote.getNote_owner() != null) {
                 int flag = 2;
@@ -235,13 +238,18 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
                         outputConnectionReader.append((char) c);
                     }
 
+                    System.out.println(outputConnectionReader.toString());
+
                     if (outputConnectionReader.toString().equals("deleted")) {
                         status = true;
+                        System.out.println(status);
                     } else {
+                        status = false;
                         System.out.println(outputConnectionReader);
                     }
 
                 } catch (Exception e) {
+                    status = false;
                     System.out.println("Delete failed");
                     e.printStackTrace();
                 }
@@ -257,13 +265,12 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
 
-            if (aBoolean == true) {
+            if (status == true) {
                 notesList.remove(item_position);
                 notes_list.notifyDataSetChanged();
 
-                Toast.makeText(c, "Note's deleted!", Toast.LENGTH_SHORT);
+                Toast.makeText(context, "Note's deleted!", Toast.LENGTH_SHORT);
             }
         }
     }
