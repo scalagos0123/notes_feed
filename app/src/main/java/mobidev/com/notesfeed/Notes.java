@@ -19,6 +19,12 @@ public class Notes implements Serializable {
         this.note_owner = null;
     }
 
+    public Notes(String notes_title, String notes_content) {
+        this.notes_title = notes_title;
+        this.notes_content = notes_content;
+        this.note_owner = null;
+    }
+
     public void setNotes_id(int notes_id) {
         this.notes_id = notes_id;
     }
