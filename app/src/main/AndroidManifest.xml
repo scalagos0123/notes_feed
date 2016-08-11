@@ -31,6 +31,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".GroupActivity"
+            android:windowSoftInputMode="adjustPan"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SignUp"

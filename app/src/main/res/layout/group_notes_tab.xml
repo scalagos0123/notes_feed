@@ -5,6 +5,15 @@
     android:layout_height="match_parent"
     android:id="@+id/group_tab_layout">
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_note_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_add_black_24dp"/>
+
     <ListView
         android:id="@+id/group_notes_list"
         android:layout_width="match_parent"
