@@ -86,7 +86,11 @@ public class Tab1 extends Fragment {
             Cursor c = db.rawQuery("select max(" + databaseHelper.COL_1 + ") from " + databaseHelper.TABLE_NAME, null);
 
             c.moveToFirst();
-            lastNoteId = c.getInt(0) + 1;
+            if (c.isNull(0)) {
+                lastNoteId = 0;
+            } else {
+                lastNoteId = c.getInt(0) + 1;
+            }
 
 //            End of getting the last id
 
