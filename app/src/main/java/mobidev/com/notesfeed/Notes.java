@@ -23,13 +23,6 @@ public class Notes implements Serializable {
         this.note_owner = null;
     }
 
-//    If you want to initialize just the title and content, use this (assuming the id in the table is auto-incremented)
-    public Notes(String notes_title, String notes_content) {
-        this.notes_title = notes_title;
-        this.notes_content = notes_content;
-        this.note_owner = null;
-    }
-
 //    If you want to initialize a blank note_title, and note_content, use this (use lastNoteId variable to set the notes_id)
     public Notes(int notes_id) {
         this.notes_id = notes_id;
