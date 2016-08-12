@@ -102,7 +102,14 @@ public class GroupNotes extends Fragment {
                 JSONArray userId = noteOwner.getJSONArray("userId");
                 JSONArray user_fullname = noteOwner.getJSONArray("user_fullname");
 
-                int getLastId = Integer.parseInt(notesIdMax.getString(0));
+                int getLastId = 0;
+
+                if (notesIdMax.isNull(0)) {
+                    getLastId = 0;
+                } else {
+                    getLastId = Integer.parseInt(notesIdMax.getString(0));
+                }
+
                 last_noteId = getLastId + 1;
                 System.out.println(last_noteId);
 
