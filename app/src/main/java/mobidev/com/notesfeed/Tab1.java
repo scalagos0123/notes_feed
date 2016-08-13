@@ -65,9 +65,11 @@ public class Tab1 extends Fragment {
         addNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Notes n = new Notes(000, "", "");
+                Notes n = new Notes(lastNoteId);
                 notesAdapter.insert(n, 0);
                 notesAdapter.notifyDataSetChanged();
+                AddNote add = new AddNote();
+                add.execute(n);
             }
         });
 
@@ -151,6 +153,10 @@ public class Tab1 extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
+//            Don't touch this part
+            lastNoteId = lastNoteId + 1;
+//            end
 
 //            what to do after the adding is complete
 //            this is optional
