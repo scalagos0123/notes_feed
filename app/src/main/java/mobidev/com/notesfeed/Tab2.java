@@ -19,6 +19,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -57,6 +60,11 @@ public class Tab2 extends Fragment {
 
         view = inflater.inflate(R.layout.tab_fragment_2, container, false);
         sampleListView = (ListView) view.findViewById(R.id.listView);
+        FloatingActionButton createGroup = (FloatingActionButton) view.findViewById(R.id.group_create);
+        FloatingActionButton findGroup = (FloatingActionButton) view.findViewById(R.id.group_find);
+
+        findGroup.setOnClickListener(buttonAction);
+        createGroup.setOnClickListener(buttonAction);
 
 //        groups.add(new Group("1", "Dummy group #1"));
 //        groups.add(new Group("2", "Dummy group #2"));
@@ -82,6 +90,22 @@ public class Tab2 extends Fragment {
 
         return view;
     }
+
+    private View.OnClickListener buttonAction = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.group_create:
+                    Intent group_create = new Intent (getActivity(), CreateGroup.class);
+                    startActivity(group_create);
+                    break;
+                case R.id.group_find:
+                    Intent group_find = new Intent();
+//                Start the find group Activity here
+                    break;
+            }
+        }
+    };
 
 //    Asynchronous task. Adding groups to the ArrayList groups
 
