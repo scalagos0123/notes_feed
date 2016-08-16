@@ -9,7 +9,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,8 +98,8 @@ public class Tab2 extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.group_create:
-                    Intent group_create = new Intent (getActivity(), CreateGroup.class);
-                    startActivity(group_create);
+                    DialogFragment d = new CreateGroup();
+                    d.show(getFragmentManager(), "createGroup");
                     break;
                 case R.id.group_find:
                     Intent group_find = new Intent();

@@ -40,11 +40,7 @@
         <activity
             android:name=".CreateGroup"
             android:label="@string/title_activity_create_group"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="mobidev.com.notesfeed.MainActivity" />
+            android:theme="@style/AlertDialog.AppCompat.Light">
         </activity>
 
     </application>
