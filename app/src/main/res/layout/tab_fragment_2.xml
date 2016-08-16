@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:padding="0dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/coordinator">
 
     <RelativeLayout
         android:layout_height="match_parent"

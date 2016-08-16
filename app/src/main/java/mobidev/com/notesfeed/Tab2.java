@@ -9,9 +9,12 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +51,7 @@ public class Tab2 extends Fragment {
     View view;
     ListView sampleListView;
     ListAdapter group_adapter;
+    CoordinatorLayout coordinatorLayout;
 //    private TextView save_button;
 
     @Override
@@ -62,6 +66,7 @@ public class Tab2 extends Fragment {
 
         view = inflater.inflate(R.layout.tab_fragment_2, container, false);
         sampleListView = (ListView) view.findViewById(R.id.listView);
+        coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator);
         FloatingActionButton createGroup = (FloatingActionButton) view.findViewById(R.id.group_create);
         FloatingActionButton findGroup = (FloatingActionButton) view.findViewById(R.id.group_find);
 
@@ -96,11 +101,11 @@ public class Tab2 extends Fragment {
     private View.OnClickListener buttonAction = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
             switch (v.getId()) {
                 case R.id.group_create:
                     DialogFragment d = new CreateGroup();
                     d.show(getFragmentManager(), "createGroup");
-                    break;
                 case R.id.group_find:
                     Intent group_find = new Intent();
 //                Start the find group Activity here
@@ -109,7 +114,15 @@ public class Tab2 extends Fragment {
         }
     };
 
+    public void makeResponse() {
+        LayoutInflater f = LayoutInflater.from(getActivity());
+        View v = f.inflate(R.layout.tab_fragment_2, null);
+        Snackbar.make(v, "Created group!", Snackbar.LENGTH_SHORT);
+    }
+
 //    Asynchronous task. Adding groups to the ArrayList groups
+
+
 
     protected class GroupsConnection extends AsyncTask<String, Void, ArrayList<Map<String, String>>> {
 
