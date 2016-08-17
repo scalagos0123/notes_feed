@@ -220,8 +220,6 @@ public class Tab2 extends Fragment {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
 
-//            View view = getActivity().getLayoutInflater().inflate(R.layout.tab_fragment_2, null);
-
             if (aBoolean == true) {
                 groups.add(addedGroup);
                 group_adapter.notifyDataSetChanged();
