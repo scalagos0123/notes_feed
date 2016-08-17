@@ -37,11 +37,8 @@
             android:name=".SignUp"
             android:label="Register"
             android:parentActivityName=".LoginActivity" />
-        <activity
-            android:name=".CreateGroup"
-            android:label="@string/title_activity_create_group"
-            android:theme="@style/AlertDialog.AppCompat.Light"></activity>
-        <activity android:name=".FindGroup"></activity>
+        <activity android:name=".FindGroup"
+            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

@@ -59,6 +59,7 @@ public class Tab2 extends Fragment {
     ListAdapter group_adapter;
     LayoutInflater inflater;
     ViewGroup container;
+    Context context;
 
     int lastGroupId;
     NotesFeedSession sessionHandler;
@@ -70,6 +71,7 @@ public class Tab2 extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         groups = new ArrayList<>();
+        context = this.getContext();
     }
 
     //Overriden method onCreateView
@@ -149,8 +151,8 @@ public class Tab2 extends Fragment {
                     showCreateGroupDialog();
                     break;
                 case R.id.group_find:
-                    Intent group_find = new Intent();
-//                Start the find group Activity here
+                    Intent group_find = new Intent(context, FindGroup.class);
+                    startActivity(group_find);
                     break;
             }
         }
