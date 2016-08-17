@@ -127,6 +127,8 @@ public class Tab2 extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 Group g = new Group (lastGroupId + "", input.getText().toString());
                 User automaticMember = new User(sessionHandler.getUserId(), sessionHandler.getUserFullName());
+                g.setGroupTotalMembers(1);
+                g.addGroup_member(automaticMember);
                 g.setGroup_moderator(automaticMember);
 
                 CreateGroupAsyncTask c = new CreateGroupAsyncTask();
@@ -200,6 +202,7 @@ public class Tab2 extends Fragment {
                 if (responseOutput.toString().equals("group added")) {
                     response = true;
                     addedGroup = params[0];
+                    System.out.println(addedGroup.getGroup_members().get(0).getName());
                 } else {
                     System.out.println(responseOutput.toString());
                     response = false;
@@ -310,7 +313,13 @@ public class Tab2 extends Fragment {
             }
 
             sampleListView.setAdapter(group_adapter);
-            lastGroupId = Integer.parseInt(groups.get(groups.size() - 1).getGroup_id()) + 1;
+
+            if (groups.size() == 0) {
+                lastGroupId = 0;
+            } else {
+                lastGroupId = Integer.parseInt(groups.get(groups.size() - 1).getGroup_id()) + 1;
+            }
+
             System.out.println(lastGroupId);
 
         }
