@@ -3,11 +3,15 @@ package mobidev.com.notesfeed;
 /**
  * Created by Debbie Co on 7/7/2016.
  */
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -21,8 +25,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -51,7 +57,13 @@ public class Tab2 extends Fragment {
     View view;
     ListView sampleListView;
     ListAdapter group_adapter;
-    CoordinatorLayout coordinatorLayout;
+    LayoutInflater inflater;
+    ViewGroup container;
+
+    int lastGroupId;
+    NotesFeedSession sessionHandler;
+    Group addedGroup;
+
 //    private TextView save_button;
 
     @Override
@@ -64,9 +76,12 @@ public class Tab2 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        this.inflater = inflater;
+        this.container = container;
+
         view = inflater.inflate(R.layout.tab_fragment_2, container, false);
+        view.setTag("tab2");
         sampleListView = (ListView) view.findViewById(R.id.listView);
-        coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator);
         FloatingActionButton createGroup = (FloatingActionButton) view.findViewById(R.id.group_create);
         FloatingActionButton findGroup = (FloatingActionButton) view.findViewById(R.id.group_find);
 
@@ -75,8 +90,7 @@ public class Tab2 extends Fragment {
 
 //        groups.add(new Group("1", "Dummy group #1"));
 //        groups.add(new Group("2", "Dummy group #2"));
-
-        NotesFeedSession sessionHandler = new NotesFeedSession(getActivity());
+        sessionHandler = new NotesFeedSession(getActivity());
         GroupsConnection group_async = new GroupsConnection();
         group_async.execute(getContext().getSharedPreferences(sessionHandler.SHARED_PREFERENCES, getActivity().MODE_PRIVATE).getString(sessionHandler.SESSION_USER_ID, null));
 
@@ -98,14 +112,40 @@ public class Tab2 extends Fragment {
         return view;
     }
 
+    private void showCreateGroupDialog() {
+        AlertDialog.Builder createGroup = new AlertDialog.Builder(this.getContext());
+        LayoutInflater inflater = this.getLayoutInflater(null);
+        View dialogLayout = inflater.inflate(R.layout.content_create_group, null);
+
+        createGroup.setView(dialogLayout);
+
+        final EditText input = (EditText) dialogLayout.findViewById(R.id.group_name);
+
+        createGroup.setNegativeButton("Cancel", null);
+        createGroup.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Group g = new Group (lastGroupId + "", input.getText().toString());
+                User automaticMember = new User(sessionHandler.getUserId(), sessionHandler.getUserFullName());
+                g.setGroup_moderator(automaticMember);
+
+                CreateGroupAsyncTask c = new CreateGroupAsyncTask();
+                c.execute(g);
+            }
+        });
+
+        createGroup.show();
+
+    }
+
     private View.OnClickListener buttonAction = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
 
             switch (v.getId()) {
                 case R.id.group_create:
-                    DialogFragment d = new CreateGroup();
-                    d.show(getFragmentManager(), "createGroup");
+                    showCreateGroupDialog();
+                    break;
                 case R.id.group_find:
                     Intent group_find = new Intent();
 //                Start the find group Activity here
@@ -115,14 +155,79 @@ public class Tab2 extends Fragment {
     };
 
     public void makeResponse() {
-        LayoutInflater f = LayoutInflater.from(getActivity());
-        View v = f.inflate(R.layout.tab_fragment_2, null);
-        Snackbar.make(v, "Created group!", Snackbar.LENGTH_SHORT);
+        Toast.makeText(this.getContext(), "Group created", Toast.LENGTH_SHORT).show();
+    }
+
+    private class CreateGroupAsyncTask extends AsyncTask<Group, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Group... params) {
+
+            String groupName = params[0].getGroup_name();
+            String moderator = params[0].getGroup_moderator().getUserId();
+
+            String link = NotesFeedSession.SERVER_ADDRESS + "/notesfeed/creategroup.php";
+
+            StringBuffer sb = new StringBuffer();
+
+            Map<String, String> m = new LinkedHashMap<>();
+            m.put("groupName", groupName);
+            m.put("moderator", moderator);
+
+            for (Map.Entry<String, String> values : m.entrySet()) {
+                sb.append(values.getKey());
+                sb.append("=");
+                sb.append(values.getValue());
+                sb.append("&");
+            }
+
+            byte[] sendBytes = sb.toString().getBytes();
+            boolean response = false;
+
+            try {
+
+                URL url = new URL(link);
+                HttpURLConnection sendData = (HttpURLConnection) url.openConnection();
+                sendData.setRequestMethod("POST");
+                sendData.getOutputStream().write(sendBytes);
+
+                BufferedReader r = new BufferedReader(new InputStreamReader(sendData.getInputStream()));
+                StringBuffer responseOutput = new StringBuffer();
+
+                for (int c; (c = r.read()) >= 0; ) {
+                    responseOutput.append((char) c);
+                }
+
+                if (responseOutput.toString().equals("group added")) {
+                    response = true;
+                    addedGroup = params[0];
+                } else {
+                    System.out.println(responseOutput.toString());
+                    response = false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return response;
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+
+//            View view = getActivity().getLayoutInflater().inflate(R.layout.tab_fragment_2, null);
+
+            if (aBoolean == true) {
+                groups.add(addedGroup);
+                group_adapter.notifyDataSetChanged();
+                makeResponse();
+            }
+        }
     }
 
 //    Asynchronous task. Adding groups to the ArrayList groups
-
-
 
     protected class GroupsConnection extends AsyncTask<String, Void, ArrayList<Map<String, String>>> {
 
@@ -205,8 +310,9 @@ public class Tab2 extends Fragment {
             }
 
             sampleListView.setAdapter(group_adapter);
+            lastGroupId = Integer.parseInt(groups.get(groups.size() - 1).getGroup_id()) + 1;
+            System.out.println(lastGroupId);
 
         }
     }
-
 }

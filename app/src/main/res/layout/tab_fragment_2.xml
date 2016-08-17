@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,6 +21,7 @@
             android:layout_alignParentBottom="true" />
 
     </RelativeLayout>
+
     <com.github.clans.fab.FloatingActionMenu
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -45,4 +46,4 @@
 
     </com.github.clans.fab.FloatingActionMenu>
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>
