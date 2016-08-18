@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -74,6 +75,13 @@ public class FindGroup extends AppCompatActivity {
         });
 
         groupsList = (ListView) findViewById(R.id.group_list);
+        groupsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Group selectedGroup = (Group) parent.getItemAtPosition(position);
+                addAsMemberDialogBox(selectedGroup);
+            }
+        });
 
 //        adapter for the original list
         groupsList_adapter = new ListAdapter(this, R.layout.group_list, groupList);
@@ -93,10 +101,12 @@ public class FindGroup extends AppCompatActivity {
                     searchResults.add(groupList.get(i));
                 }
             }
-
             groupsList.setAdapter(results_adapter);
-
         }
+    }
+
+    private void addAsMemberDialogBox(Group selectedGroup) {
+
     }
 
     protected class GroupsConnection extends AsyncTask<String, Void, ArrayList<Map<String, String>>> {
