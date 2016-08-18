@@ -24,27 +24,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageButton
+                android:id="@+id/backbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:background="@color/transparent" />
+
             <EditText
                 android:id="@+id/search_input"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/find_group_searchbar"
-                android:layout_alignParentStart="true"
+                android:layout_toEndOf="@+id/backbtn"
                 android:background="@color/transparent"
                 android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/searchbtn"
                 android:singleLine="true"
+                android:layout_marginLeft="10dp"
                 />
-
-            <ImageButton
-                android:id="@+id/searchbtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_forward_black_24dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:background="@color/transparent" />
 
         </RelativeLayout>
 

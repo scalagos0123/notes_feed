@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -36,7 +37,6 @@ public class FindGroup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_group);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         n = new NotesFeedSession(this);
         groupList = new ArrayList<>();
@@ -46,6 +46,14 @@ public class FindGroup extends AppCompatActivity {
         groupsConnection.execute(n.getUserId());
 
         EditText inputBox = (EditText) findViewById(R.id.search_input);
+        ImageButton back = (ImageButton) findViewById(R.id.backbtn) ;
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         inputBox.addTextChangedListener(new TextWatcher() {
             @Override
@@ -77,14 +85,11 @@ public class FindGroup extends AppCompatActivity {
 
     private void performSearch(String input) {
         if (input.length() == 0) {
-
             groupsList.setAdapter(groupsList_adapter);
-
         } else if (input.length() > 0) {
             searchResults.clear();
-
             for (int i = 0; i < groupList.size(); i++) {
-                if (groupList.get(i).getGroup_name().equals(input)) {
+                if (groupList.get(i).getGroup_name().contains(input)) {
                     searchResults.add(groupList.get(i));
                 }
             }
@@ -99,7 +104,7 @@ public class FindGroup extends AppCompatActivity {
         @Override
         protected ArrayList<Map<String, String>> doInBackground(String... params) {
             String user_id = "user_id=" + params[0];
-            String link = "" + NotesFeedSession.SERVER_ADDRESS + "notesfeed/getgroups_find.php?" + user_id;
+            String link = "" + NotesFeedSession.SERVER_ADDRESS + "notesfeed/getgroups.php?" + user_id;
             byte[] user_id_bytes = user_id.getBytes();
 
             System.out.println("Sending data");
