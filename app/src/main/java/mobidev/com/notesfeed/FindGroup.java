@@ -104,7 +104,7 @@ public class FindGroup extends AppCompatActivity {
         @Override
         protected ArrayList<Map<String, String>> doInBackground(String... params) {
             String user_id = "user_id=" + params[0];
-            String link = "" + NotesFeedSession.SERVER_ADDRESS + "notesfeed/getgroups.php?" + user_id;
+            String link = "" + NotesFeedSession.SERVER_ADDRESS + "notesfeed/getgroups_find.php?" + user_id;
             byte[] user_id_bytes = user_id.getBytes();
 
             System.out.println("Sending data");
