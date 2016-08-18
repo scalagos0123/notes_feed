@@ -3,7 +3,13 @@ package mobidev.com.notesfeed;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,8 +26,10 @@ import java.util.Map;
 public class FindGroup extends AppCompatActivity {
 
     ArrayList<Group> groupList;
+    ArrayList<Group> searchResults;
     ListView groupsList;
     ListAdapter groupsList_adapter;
+    ListAdapter results_adapter;
     NotesFeedSession n;
 
     @Override
@@ -32,12 +40,58 @@ public class FindGroup extends AppCompatActivity {
 
         n = new NotesFeedSession(this);
         groupList = new ArrayList<>();
-
-        groupsList = (ListView) findViewById(R.id.group_list);
-        groupsList_adapter = new ListAdapter(this, R.layout.group_list, groupList);
+        searchResults = new ArrayList<>();
 
         GroupsConnection groupsConnection = new GroupsConnection();
         groupsConnection.execute(n.getUserId());
+
+        EditText inputBox = (EditText) findViewById(R.id.search_input);
+
+        inputBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                performSearch(s.toString());
+                System.out.println("Searching now: " + s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        groupsList = (ListView) findViewById(R.id.group_list);
+
+//        adapter for the original list
+        groupsList_adapter = new ListAdapter(this, R.layout.group_list, groupList);
+
+//        adapter for the results
+        results_adapter  = new ListAdapter(this, R.layout.group_list, searchResults);
+
+    }
+
+    private void performSearch(String input) {
+        if (input.length() == 0) {
+
+            groupsList.setAdapter(groupsList_adapter);
+
+        } else if (input.length() > 0) {
+            searchResults.clear();
+
+            for (int i = 0; i < groupList.size(); i++) {
+                if (groupList.get(i).getGroup_name().equals(input)) {
+                    searchResults.add(groupList.get(i));
+                }
+            }
+
+            groupsList.setAdapter(results_adapter);
+
+        }
     }
 
     protected class GroupsConnection extends AsyncTask<String, Void, ArrayList<Map<String, String>>> {

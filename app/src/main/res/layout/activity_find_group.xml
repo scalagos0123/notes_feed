@@ -3,16 +3,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="mobidev.com.notesfeed.FindGroup">
 
+    <android.support.v7.widget.CardView
+        android:id="@+id/search_card"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:cardBackgroundColor="@color/cardview_light_background"
+        app:cardElevation="@dimen/cardview_default_elevation"
+        app:contentPaddingLeft="10dp"
+        app:contentPaddingRight="10dp"
+        android:layout_marginBottom="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/search_input"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/find_group_searchbar"
+                android:layout_alignParentStart="true"
+                android:background="@color/transparent"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/searchbtn"
+                android:singleLine="true"
+                />
+
+            <ImageButton
+                android:id="@+id/searchbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_forward_black_24dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:background="@color/transparent" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
     <ListView
         android:id="@+id/group_list"
         android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_below="@+id/search_card">
 
     </ListView>
 
