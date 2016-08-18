@@ -1,6 +1,9 @@
 package mobidev.com.notesfeed;
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -106,7 +109,22 @@ public class FindGroup extends AppCompatActivity {
     }
 
     private void addAsMemberDialogBox(Group selectedGroup) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Do you want to join " + selectedGroup.getGroup_name() + "?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+//                Call add to on of the group members asynctask
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
 
+        builder.show();
     }
 
     protected class GroupsConnection extends AsyncTask<String, Void, ArrayList<Map<String, String>>> {
