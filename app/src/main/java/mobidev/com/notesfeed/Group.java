@@ -19,11 +19,20 @@ public class Group implements Serializable {
     ArrayList<User> group_members;
     private int groupTotalMembers;
     private User group_moderator;
+    private int privacy;
 
     public Group(String group_id, String group_name) {
         this.group_id = group_id;
         this.group_name = group_name;
         this.group_members = new ArrayList<User>();
+    }
+
+    public int getPrivacy() {
+        return privacy;
+    }
+
+    public void setPrivacy(int privacy) {
+        this.privacy = privacy;
     }
 
     public void setGroup_moderator (User moderatorObject) {
