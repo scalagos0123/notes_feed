@@ -82,7 +82,6 @@ public class Tab2 extends Fragment {
         this.container = container;
 
         view = inflater.inflate(R.layout.tab_fragment_2, container, false);
-        view.setTag("tab2");
         sampleListView = (ListView) view.findViewById(R.id.listView);
         FloatingActionButton createGroup = (FloatingActionButton) view.findViewById(R.id.group_create);
         FloatingActionButton findGroup = (FloatingActionButton) view.findViewById(R.id.group_find);
@@ -90,14 +89,10 @@ public class Tab2 extends Fragment {
         findGroup.setOnClickListener(buttonAction);
         createGroup.setOnClickListener(buttonAction);
 
-//        groups.add(new Group("1", "Dummy group #1"));
-//        groups.add(new Group("2", "Dummy group #2"));
         sessionHandler = new NotesFeedSession(getActivity());
-        GroupsConnection group_async = new GroupsConnection();
-        group_async.execute(getContext().getSharedPreferences(sessionHandler.SHARED_PREFERENCES, getActivity().MODE_PRIVATE).getString(sessionHandler.SESSION_USER_ID, null));
+        getNotes(sessionHandler.getUserId());
 
         group_adapter = new ListAdapter(getActivity(), R.layout.group_list, groups);
-//        sampleListView.setAdapter(group_adapter);
 
         sampleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -112,6 +107,21 @@ public class Tab2 extends Fragment {
         });
 
         return view;
+    }
+
+    private void getNotes(String userId) {
+        GroupsConnection group_async = new GroupsConnection();
+        group_async.execute(userId);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == 95) {
+            getNotes(sessionHandler.getUserId());
+        }
+
     }
 
     private void showCreateGroupDialog() {
@@ -151,8 +161,12 @@ public class Tab2 extends Fragment {
                     showCreateGroupDialog();
                     break;
                 case R.id.group_find:
+                    Bundle group = new Bundle();
+                    group.putSerializable("existingGroup", groups);
+
                     Intent group_find = new Intent(context, FindGroup.class);
-                    startActivity(group_find);
+                    group_find.putExtra("groupBundle", group);
+                    startActivityForResult(group_find, 90);
                     break;
             }
         }
@@ -295,6 +309,7 @@ public class Tab2 extends Fragment {
         protected void onPostExecute(ArrayList<Map<String, String>> stringStringMap) {
             super.onPostExecute(stringStringMap);
 
+            groups.clear();
             int[] group_members = new int[100];
             int position = 0;
 
@@ -311,7 +326,6 @@ public class Tab2 extends Fragment {
                 groups.add(g);
                 position++;
             }
-
             sampleListView.setAdapter(group_adapter);
 
             if (groups.size() == 0) {

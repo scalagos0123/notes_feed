@@ -1,13 +1,17 @@
 package mobidev.com.notesfeed;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,10 +36,12 @@ public class FindGroup extends AppCompatActivity {
 
     ArrayList<Group> groupList;
     ArrayList<Group> searchResults;
+    ArrayList<Group> existingGroups;
     ListView groupsList;
     ListAdapter groupsList_adapter;
     ListAdapter results_adapter;
     NotesFeedSession n;
+    Context c;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,10 @@ public class FindGroup extends AppCompatActivity {
         n = new NotesFeedSession(this);
         groupList = new ArrayList<>();
         searchResults = new ArrayList<>();
+        this.c = this;
+
+        Bundle bundle = getIntent().getExtras().getBundle("groupBundle");
+        existingGroups = (ArrayList<Group>) bundle.getSerializable("existingGroup");
 
         GroupsConnection groupsConnection = new GroupsConnection();
         groupsConnection.execute(n.getUserId());
@@ -81,8 +91,19 @@ public class FindGroup extends AppCompatActivity {
         groupsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Group selectedGroup = (Group) parent.getItemAtPosition(position);
-                addAsMemberDialogBox(selectedGroup);
+
+                boolean status = memberCheck(selectedGroup);
+
+                if (!status) {
+                    addAsMemberDialogBox(selectedGroup);
+                } else {
+                    Intent groupActivity = new Intent(c, GroupActivity.class);
+                    groupActivity.putExtra("selectedGroup", selectedGroup);
+                    startActivity(groupActivity);
+                }
+
             }
         });
 
@@ -92,6 +113,21 @@ public class FindGroup extends AppCompatActivity {
 //        adapter for the results
         results_adapter  = new ListAdapter(this, R.layout.group_list, searchResults);
 
+    }
+
+    private boolean memberCheck(Group selectedGroup) {
+        boolean status = false;
+        int i = 0;
+
+        while (status == false && i < existingGroups.size()) {
+            if (existingGroups.get(i).getGroup_id().equals(selectedGroup.getGroup_id())) {
+                status = true;
+            } else {
+                i++;
+            }
+        }
+
+        return status;
     }
 
     private void performSearch(String input) {
@@ -108,16 +144,19 @@ public class FindGroup extends AppCompatActivity {
         }
     }
 
-    private void addAsMemberDialogBox(Group selectedGroup) {
+    private void addAsMemberDialogBox(final Group selectedGroup) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Do you want to join " + selectedGroup.getGroup_name() + "?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 //                Call add to on of the group members asynctask
+                AddToGroup add = new AddToGroup();
+                add.execute(selectedGroup.getGroup_id());
             }
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -125,6 +164,60 @@ public class FindGroup extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    private class AddToGroup extends AsyncTask<String, Void, Boolean> {
+
+        String groupId;
+        String userId;
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            boolean status = false;
+            groupId = params[0];
+            userId = n.getUserId();
+            String link = NotesFeedSession.SERVER_ADDRESS + "/notesfeed/addmember.php";
+            String data = "group_id=" + groupId + "&user_id=" + userId;
+            byte[] dataBytes = data.getBytes();
+
+            System.out.println("adding member");
+            try {
+                URL url = new URL(link);
+                HttpURLConnection addMemberConnection = (HttpURLConnection) url.openConnection();
+                addMemberConnection.setRequestMethod("POST");
+                addMemberConnection.setDoOutput(true);
+                addMemberConnection.getOutputStream().write(dataBytes);
+
+                System.out.println("Data sent");
+
+                BufferedReader r = new BufferedReader(new InputStreamReader(addMemberConnection.getInputStream()));
+                StringBuffer response = new StringBuffer();
+
+                for (int i; (i = r.read()) >= 0;) {
+                    response.append((char) i);
+                }
+
+                if (response.toString().equals("member added")) {
+                    status = true;
+                } else {
+                    status = false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return status;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if (aBoolean == true) {
+                setResult(95);
+                finish();
+            }
+        }
     }
 
     protected class GroupsConnection extends AsyncTask<String, Void, ArrayList<Map<String, String>>> {

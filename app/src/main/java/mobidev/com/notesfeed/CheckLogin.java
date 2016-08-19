@@ -75,6 +75,7 @@ public class CheckLogin extends AsyncTask<String, Void, Boolean> {
             getUrl.getOutputStream().write(loginData);
             System.out.println("Data sent");
 
+
 //            Receiving data from server
             InputStreamReader is = new InputStreamReader(getUrl.getInputStream());
             Reader in = new BufferedReader(is);
