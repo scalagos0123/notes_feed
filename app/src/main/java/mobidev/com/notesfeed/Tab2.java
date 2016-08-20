@@ -3,35 +3,23 @@ package mobidev.com.notesfeed;
 /**
  * Created by Debbie Co on 7/7/2016.
  */
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,7 +31,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -90,7 +77,7 @@ public class Tab2 extends Fragment {
         createGroup.setOnClickListener(buttonAction);
 
         sessionHandler = new NotesFeedSession(getActivity());
-        getNotes(sessionHandler.getUserId());
+        getGroups(sessionHandler.getUserId());
 
         group_adapter = new ListAdapter(getActivity(), R.layout.group_list, groups);
 
@@ -102,14 +89,14 @@ public class Tab2 extends Fragment {
 
                 Intent groupActivity = new Intent(getContext(), GroupActivity.class);
                 groupActivity.putExtra("selectedGroup", itemOnList);
-                startActivity(groupActivity);
+                startActivityForResult(groupActivity, 100);
             }
         });
 
         return view;
     }
 
-    private void getNotes(String userId) {
+    private void getGroups(String userId) {
         GroupsConnection group_async = new GroupsConnection();
         group_async.execute(userId);
     }
@@ -119,7 +106,7 @@ public class Tab2 extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == 95) {
-            getNotes(sessionHandler.getUserId());
+            getGroups(sessionHandler.getUserId());
         }
 
     }

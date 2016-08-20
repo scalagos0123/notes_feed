@@ -84,12 +84,13 @@ public class GroupSettings extends Fragment {
         if (g.getPrivacy() == 0) {
             privacySwitchText.setText(publicMessage);
             privacySwitch.setChecked(false);
-        } else {
+        } else if (g.getPrivacy() == 1) {
             privacySwitchText.setText(privateMessage);
             privacySwitch.setChecked(true);
         }
 
         leaveGroup.setOnClickListener(clickListeners);
+        deleteGroup.setOnClickListener(clickListeners);
 
         if (n.getUserId().equals(groupModeratorId)) {
             groupName.setFocusable(true);
@@ -117,7 +118,6 @@ public class GroupSettings extends Fragment {
 
             groupName.setOnClickListener(clickListeners);
             addMember.setOnClickListener(clickListeners);
-            deleteGroup.setOnClickListener(clickListeners);
             saveButton.setOnClickListener(clickListeners);
             memberList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -136,6 +136,8 @@ public class GroupSettings extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 //                call delete group asynctask
+                GroupActions g = new GroupActions();
+                g.execute(1);
             }
         });
 
@@ -157,6 +159,8 @@ public class GroupSettings extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 //                call asynctask deleting user_id in the current group
+                GroupActions g = new GroupActions();
+                g.execute(0);
             }
         });
         leaveDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -255,7 +259,6 @@ public class GroupSettings extends Fragment {
                     }
 
                     g.setPrivacy(groupPrivacy.getInt(0));
-
                     performModeration(g.getGroup_moderator().getUserId());
 
                 } catch (Exception e) {
@@ -323,6 +326,76 @@ public class GroupSettings extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            return status;
+        }
+    }
+
+    private class GroupActions extends AsyncTask<Integer, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Integer... params) {
+            boolean status = false;
+            int flag = params[0];
+            String link = NotesFeedSession.SERVER_ADDRESS + "/notesfeed/groupactions.php";
+            String body = "";
+            byte[] bodyBytes = null;
+
+            int newModerator = 0;
+
+            if (flag == 0) {
+
+                if (n.getUserId().equals(g.getGroup_moderator().getUserId())) {
+                    for (int i = 0; i < g.getGroup_members().size(); i++) {
+                        if (n.getUserId().equals(g.getGroup_members().get(i).getUserId())) {
+                            g.getGroup_members().remove(i);
+                        }
+                    }
+
+                    if (g.getGroup_members().size() == 0) {
+                        flag = 1;
+                    } else {
+                        newModerator = Integer.parseInt(g.getGroup_members().get(0).getUserId());
+                    }
+
+                } else {
+                    newModerator = Integer.parseInt(g.getGroup_moderator().getUserId());
+                }
+
+                body = "group_id=" + g.getGroup_id() + "&user_id=" + n.getUserId() + "&new_moderator=" + newModerator + "&flag=" + flag;
+                bodyBytes = body.getBytes();
+            }
+
+            if (flag == 1) {
+                body = "group_id=" + g.getGroup_id() + "&flag=" + flag;
+                bodyBytes = body.getBytes();
+            }
+
+            try {
+                URL url = new URL(link);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setDoOutput(true);
+                urlConnection.getOutputStream().write(bodyBytes);
+
+                BufferedReader response = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                StringBuilder responseToString = new StringBuilder();
+
+                for (int i; (i = response.read()) >= 0;) {
+                    responseToString.append((char) i);
+                }
+
+                if (responseToString.toString().equals("removed group") || responseToString.toString().equals("removed member")) {
+                    System.out.println(responseToString.toString());
+                    getActivity().setResult(95);
+                    getActivity().finish();
+                } else {
+                    System.out.println(responseToString.toString());
+                }
+
+            } catch (Exception e) {
+
+            }
+
 
             return status;
         }
