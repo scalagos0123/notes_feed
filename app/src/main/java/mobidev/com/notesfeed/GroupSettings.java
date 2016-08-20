@@ -46,6 +46,7 @@ public class GroupSettings extends Fragment {
     private CardView deleteGroup;
     private ListView memberList;
     private TextView privacySwitchText;
+    private TextView moderatorName;
     private NotesFeedSession n;
     private User selectedUser;
     private MemberAdapter memberList_adapter;
@@ -88,6 +89,7 @@ public class GroupSettings extends Fragment {
         deleteGroup = (CardView) view.findViewById(R.id.delete_group);
         memberList = (ListView) view.findViewById(R.id.member_list);
         privacySwitchText = (TextView) view.findViewById(R.id.privacy_switch_text);
+        moderatorName = (TextView) view.findViewById(R.id.moderator_name);
     }
 
     private void performModeration(String groupModeratorId) {
@@ -271,6 +273,12 @@ public class GroupSettings extends Fragment {
                     break;
                 case R.id.add_member:
 //                    call add member activity here
+                    Bundle b = new Bundle();
+                    b.putSerializable("members", g.getGroup_members());
+
+                    Intent i = new Intent (getContext(), AddMember.class);
+                    i.putExtra("usersBundle", b);
+                    startActivity(i);
                     break;
                 case R.id.delete_group:
                     showDeleteGroupDialogBox();
@@ -346,6 +354,7 @@ public class GroupSettings extends Fragment {
 
             if (aBoolean && result.equals("moderator changed")) {
                 g.setGroup_moderator(selectedUser);
+                moderatorName.setText(g.getGroup_moderator().getName());
                 performModeration(g.getGroup_moderator().getUserId());
             } else if (aBoolean && result.equals("removed member")) {
                 if (removeUser()) {
@@ -423,11 +432,13 @@ public class GroupSettings extends Fragment {
 
                         if (member.getUserId().equals(groupModerator.getString(0))) {
                             g.setGroup_moderator(member);
+                            g.getGroup_members().remove(i);
                         }
                     }
 
                     g.setPrivacy(groupPrivacy.getInt(0));
                     performModeration(g.getGroup_moderator().getUserId());
+                    moderatorName.setText(g.getGroup_moderator().getName());
 
                 } catch (Exception e) {
                     e.printStackTrace();
