@@ -1,6 +1,7 @@
 package mobidev.com.notesfeed;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -45,6 +47,11 @@ public class GroupSettings extends Fragment {
     private NotesFeedSession n;
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GroupActivity activity = (GroupActivity) getActivity();
@@ -74,6 +81,9 @@ public class GroupSettings extends Fragment {
         deleteGroup = (CardView) view.findViewById(R.id.delete_group);
         memberList = (ListView) view.findViewById(R.id.member_list);
         privacySwitchText = (TextView) view.findViewById(R.id.privacy_switch_text);
+
+        ArrayAdapter<User> memberList_adapter = new ArrayAdapter<User>(this.getContext(), R.layout.member_list, g.getGroup_members());
+        memberList.setAdapter(memberList_adapter);
     }
 
     private void performModeration(String groupModeratorId) {
