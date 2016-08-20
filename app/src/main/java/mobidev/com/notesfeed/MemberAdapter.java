@@ -21,6 +21,7 @@ public class MemberAdapter extends ArrayAdapter<User> {
     public MemberAdapter(Context context, int resource, ArrayList<User> objects) {
         super(context, resource, objects);
         this.resource = resource;
+        this.inflater = LayoutInflater.from(this.getContext());
         members = objects;
     }
 
@@ -28,7 +29,8 @@ public class MemberAdapter extends ArrayAdapter<User> {
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = inflater.inflate(R.layout.member_list, parent, false);
 
-        TextView memberName = (TextView) convertView.findViewById(R.id.);
+        TextView memberName = (TextView) convertView.findViewById(R.id.person_name);
+        memberName.setText(members.get(position).getName());
 
         return convertView;
     }

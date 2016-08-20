@@ -82,7 +82,7 @@ public class GroupSettings extends Fragment {
         memberList = (ListView) view.findViewById(R.id.member_list);
         privacySwitchText = (TextView) view.findViewById(R.id.privacy_switch_text);
 
-        ArrayAdapter<User> memberList_adapter = new ArrayAdapter<User>(this.getContext(), R.layout.member_list, g.getGroup_members());
+        MemberAdapter memberList_adapter = new MemberAdapter(this.getContext(), R.layout.member_list, g.getGroup_members());
         memberList.setAdapter(memberList_adapter);
     }
 
@@ -208,6 +208,13 @@ public class GroupSettings extends Fragment {
                     saveButton.setVisibility(View.GONE);
                     break;
             }
+        }
+    };
+
+    AdapterView.OnItemClickListener onItemClick = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
         }
     };
 
