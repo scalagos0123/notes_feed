@@ -32,6 +32,7 @@ public class Tab1 extends Fragment {
     private Notes_ListAdapter notesAdapter;
     private int lastNoteId;
     private DatabaseHelper databaseHelper;
+    private int i=0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,11 +87,23 @@ public class Tab1 extends Fragment {
             Cursor c = db.rawQuery("select max(" + databaseHelper.COL_1 + ") from " + databaseHelper.TABLE_NAME, null);
 
             c.moveToFirst();
-            if (c.isNull(0)) {
-                lastNoteId = 0;
-            } else {
-                lastNoteId = c.getInt(0) + 1;
+            lastNoteId = c.getInt(0) + 1;
+
+            Cursor d= db.rawQuery("select * from my_notes", null);
+            while (i <= lastNoteId){
+
+
+
+                int notes_id;
+
+                String notes_title;
+                String notes_content;
+                Notes n = new Notes(d.getInt(d.getColumnIndex(DatabaseHelper.COL_1)), d.getString(d.getColumnIndex(DatabaseHelper.COL_2)), d.getString(d.getColumnIndex(DatabaseHelper.COL_3)));
+                notes.add(n);
+                d.moveToNext();
+                i++;
             }
+
 
 //            End of getting the last id
 
@@ -126,6 +139,10 @@ public class Tab1 extends Fragment {
 
         @Override
         protected Void doInBackground(Notes... params) {
+            SQLiteDatabase db = databaseHelper.getWritableDatabase();
+            Cursor d = db.rawQuery("insert into my_notes (notes_id, notes_title, notes_content values('notes_id','','')", null);
+            int notes_id = lastNoteId;
+            Notes n= new Notes(notes_id);
 
             /*
 
@@ -140,7 +157,7 @@ public class Tab1 extends Fragment {
             No need to implement save and delete in Tab1. See note below:
 
             * Saving and Deleting a note, nakalagay sa Notes_ListAdapter, in their respective doInBackground methods (Saving is the UpdateNote class, then Deleting is DeleteNote)
-            * Wala na kayo gagawin sa ClickListeners. I've set them to adapt to the note that you want to modify.
+            * Wala na kayo gagawin sa ClickListeners. I've set them to adapt to the note that you want to modify.not
             * Yung pag-save and pag-delete, ilalagay nyo dun sa may else part (may nilagay akong if(selectedNote.getNote_Owner() != null) condition. Dun nyo ilagay sa else yung updating, and deleting the local database
 
              */
@@ -151,6 +168,8 @@ public class Tab1 extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
+            lastNoteId = lastNoteId + 1;
 
 //            what to do after the adding is complete
 //            this is optional
