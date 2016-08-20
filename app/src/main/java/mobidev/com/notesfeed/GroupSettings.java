@@ -275,10 +275,12 @@ public class GroupSettings extends Fragment {
 //                    call add member activity here
                     Bundle b = new Bundle();
                     b.putSerializable("members", g.getGroup_members());
+                    b.putSerializable("moderator", g.getGroup_moderator());
+                    b.putString("groupId", g.getGroup_id());
 
                     Intent i = new Intent (getContext(), AddMember.class);
                     i.putExtra("usersBundle", b);
-                    startActivity(i);
+                    startActivityForResult(i, 100);
                     break;
                 case R.id.delete_group:
                     showDeleteGroupDialogBox();
