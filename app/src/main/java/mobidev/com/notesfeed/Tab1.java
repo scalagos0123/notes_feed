@@ -93,9 +93,12 @@ public class Tab1 extends Fragment {
                 lastNoteId = c.getInt(0) + 1;
             }
 
+            c.close();
+
             Cursor d =db.rawQuery("select * from my_notes",null);
+
             while(i <= lastNoteId){
-                 Notes n =new Notes(d.getInt(d.getColumnIndex(databaseHelper.COL_1)), d.getString(d.getColumnIndex(databaseHelper.COL_2)),d.getString(d.getColumnIndex(databaseHelper.COL_3)));
+                Notes n =new Notes(d.getInt(d.getColumnIndex(databaseHelper.COL_1)), d.getString(d.getColumnIndex(databaseHelper.COL_2)),d.getString(d.getColumnIndex(databaseHelper.COL_3)));
                 notes.add(n);
                 d.moveToNext();
                 i++;
