@@ -32,6 +32,7 @@ public class Tab1 extends Fragment {
     private Notes_ListAdapter notesAdapter;
     private int lastNoteId;
     private DatabaseHelper databaseHelper;
+    private int i=0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,6 +93,13 @@ public class Tab1 extends Fragment {
                 lastNoteId = c.getInt(0) + 1;
             }
 
+            Cursor d =db.rawQuery("select * from my_notes",null);
+            while(i <= lastNoteId){
+                 Notes n =new Notes(d.getInt(d.getColumnIndex(databaseHelper.COL_1)), d.getString(d.getColumnIndex(databaseHelper.COL_2)),d.getString(d.getColumnIndex(databaseHelper.COL_3)));
+                notes.add(n);
+                d.moveToNext();
+                i++;
+            }
 //            End of getting the last id
 
             /*
@@ -127,6 +135,10 @@ public class Tab1 extends Fragment {
         @Override
         protected Void doInBackground(Notes... params) {
 
+            SQLiteDatabase db =databaseHelper.getWritableDatabase();
+            Cursor d= db.rawQuery("insert into my_notes (notes_id,notes_title,notes_content) values ('notes_id','','')" ,null);
+            int notes_id = lastNoteId;
+            Notes n = new Notes(notes_id);
             /*
 
             Execute the inserting of a new note here.
