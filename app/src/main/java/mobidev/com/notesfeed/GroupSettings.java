@@ -104,9 +104,13 @@ public class GroupSettings extends Fragment {
                     if (isChecked) {
                         privacySwitchText.setText(privateMessage);
 //                        call asynctask with true as parameter
+                        UpdateGroup u = new UpdateGroup();
+                        u.execute("true");
                     } else {
                         privacySwitchText.setText(publicMessage);
 //                        call asynctask with false as parameter
+                        UpdateGroup u = new UpdateGroup();
+                        u.execute("false");
                     }
                 }
             });
@@ -185,6 +189,9 @@ public class GroupSettings extends Fragment {
                     break;
                 case R.id.save_button:
 //                    call update group name asynctask here
+                    UpdateGroup u = new UpdateGroup();
+                    u.execute(groupName.getText().toString());
+                    saveButton.setVisibility(View.GONE);
                     break;
             }
         }
@@ -257,6 +264,67 @@ public class GroupSettings extends Fragment {
             } else  {
                 System.out.println("Error in connection");
             }
+        }
+    }
+
+    private class UpdateGroup extends AsyncTask<String, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(String... params) {
+
+            String selectedUpdate = params[0];
+            int flag = 0;
+            int privacyCondition = 0;
+            String body = "";
+            byte[] bodyBytes = null;
+            String link = NotesFeedSession.SERVER_ADDRESS + "/notesfeed/updategroup.php";
+            boolean status = false;
+
+            if (selectedUpdate.equals("true") || selectedUpdate.equals("false")) {
+                flag = 1;
+
+                if (selectedUpdate.equals("true")) {
+                    privacyCondition = 1;
+                } else if (selectedUpdate.equals("false")) {
+                    privacyCondition = 0;
+                }
+
+                body = "group_id=" + g.getGroup_id() + "&privacy=" + privacyCondition + "&flag=" + flag;
+                bodyBytes = body.getBytes();
+
+            } else {
+                flag = 0;
+                body = "group_id=" + g.getGroup_id() + "&group_name=" + selectedUpdate + "&flag=" + flag;
+                bodyBytes = body.getBytes();
+
+            }
+
+            try {
+                URL url = new URL(link);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setDoOutput(true);
+                urlConnection.getOutputStream().write(bodyBytes);
+
+                BufferedReader getResponse = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+
+                for (int i; (i = getResponse.read()) >= 0;) {
+                    response.append((char) i);
+                }
+
+                System.out.println(response.toString());
+
+                if (response.toString().equals("privacy updated") || response.toString().equals("group name updated")) {
+                    return true;
+                } else {
+                    return false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return status;
         }
     }
 }
