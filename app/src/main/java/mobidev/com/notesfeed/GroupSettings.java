@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -45,6 +47,9 @@ public class GroupSettings extends Fragment {
     private ListView memberList;
     private TextView privacySwitchText;
     private NotesFeedSession n;
+    private User selectedUser;
+    private MemberAdapter memberList_adapter;
+    AlertDialog dialog;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -61,6 +66,8 @@ public class GroupSettings extends Fragment {
 
         GetOptions settingsAsynctask = new GetOptions();
         settingsAsynctask.execute(g.getGroup_id());
+
+        memberList_adapter = new MemberAdapter(this.getContext(), R.layout.member_list, g.getGroup_members());
     }
 
     @Override
@@ -81,9 +88,6 @@ public class GroupSettings extends Fragment {
         deleteGroup = (CardView) view.findViewById(R.id.delete_group);
         memberList = (ListView) view.findViewById(R.id.member_list);
         privacySwitchText = (TextView) view.findViewById(R.id.privacy_switch_text);
-
-        MemberAdapter memberList_adapter = new MemberAdapter(this.getContext(), R.layout.member_list, g.getGroup_members());
-        memberList.setAdapter(memberList_adapter);
     }
 
     private void performModeration(String groupModeratorId) {
@@ -100,7 +104,6 @@ public class GroupSettings extends Fragment {
         }
 
         leaveGroup.setOnClickListener(clickListeners);
-        deleteGroup.setOnClickListener(clickListeners);
 
         if (n.getUserId().equals(groupModeratorId)) {
             groupName.setFocusable(true);
@@ -108,6 +111,7 @@ public class GroupSettings extends Fragment {
             addMember.setVisibility(View.VISIBLE);
             deleteGroup.setVisibility(View.VISIBLE);
             privacySwitch.setVisibility(View.VISIBLE);
+            memberList.setOnItemClickListener(onItemClick);
 
             privacySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -129,12 +133,16 @@ public class GroupSettings extends Fragment {
             groupName.setOnClickListener(clickListeners);
             addMember.setOnClickListener(clickListeners);
             saveButton.setOnClickListener(clickListeners);
-            memberList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    call dialog box here containing moderator actions
-                }
-            });
+            deleteGroup.setOnClickListener(clickListeners);
+            memberList.setOnItemClickListener(onItemClick);
+
+        } else {
+            groupName.setFocusable(false);
+            groupName.setFocusableInTouchMode(false);
+            addMember.setVisibility(View.GONE);
+            deleteGroup.setVisibility(View.GONE);
+            privacySwitch.setVisibility(View.GONE);
+            memberList.setOnItemClickListener(null);
         }
     }
 
@@ -183,10 +191,81 @@ public class GroupSettings extends Fragment {
         leaveDialog.show();
     }
 
+    private void confirmUserRemoval(User selectedUser) {
+        AlertDialog.Builder removal = new AlertDialog.Builder(this.getContext());
+        removal.setTitle("Confirm removal");
+        removal.setMessage("Are you sure you want to remove " + selectedUser.getName() + "?");
+        final AlertDialog moderatorOptionsDialog = this.dialog;
+        removal.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+//                call removal of member asynctask
+                moderatorOptionsDialog.dismiss();
+                ModeratorActions m = new ModeratorActions();
+                m.execute(1);
+            }
+        });
+
+        removal.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        removal.show();
+    }
+
+    private void showMemberOptions(User selectedUser) {
+        this.selectedUser = selectedUser;
+        AlertDialog.Builder memberOptions = new AlertDialog.Builder(this.getContext());
+        LayoutInflater inflater = LayoutInflater.from(this.getContext());
+        View v = inflater.inflate(R.layout.memberaction_dialog, null);
+
+        RelativeLayout removeMember = (RelativeLayout) v.findViewById(R.id.remove_member);
+        RelativeLayout setModerator = (RelativeLayout) v.findViewById(R.id.set_moderator);
+
+        removeMember.setOnClickListener(clickListeners);
+        setModerator.setOnClickListener(clickListeners);
+
+        memberOptions.setView(v);
+        this.dialog = memberOptions.create();
+        this.dialog.show();
+    }
+
+    private void confirmModeratorChange(final User selectedUser) {
+        AlertDialog.Builder moderatorChange = new AlertDialog.Builder(this.getContext());
+        moderatorChange.setTitle("Confirm moderator change");
+        moderatorChange.setMessage("Are you sure you want to make " + selectedUser.getName() + " moderator?");
+        final AlertDialog moderatorOptionsDialog = this.dialog;
+        moderatorChange.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+//                Asynctask moderator actions with flag 0
+                moderatorOptionsDialog.dismiss();
+                ModeratorActions m = new ModeratorActions();
+                m.execute(0);
+            }
+        });
+        moderatorChange.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        moderatorChange.show();
+    }
+
     View.OnClickListener clickListeners = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
+                case R.id.set_moderator:
+                    confirmModeratorChange(selectedUser);
+                    break;
+                case R.id.remove_member:
+                    confirmUserRemoval(selectedUser);
+                    break;
                 case R.id.group_name:
                     saveButton.setVisibility(View.VISIBLE);
                     break;
@@ -194,15 +273,12 @@ public class GroupSettings extends Fragment {
 //                    call add member activity here
                     break;
                 case R.id.delete_group:
-//                    call delete group dialog box here
                     showDeleteGroupDialogBox();
                     break;
                 case R.id.leave_group:
-//                    call leave group dialog box here
                     showLeaveGroupDialogBox();
                     break;
                 case R.id.save_button:
-//                    call update group name asynctask here
                     UpdateGroup u = new UpdateGroup();
                     u.execute(groupName.getText().toString());
                     saveButton.setVisibility(View.GONE);
@@ -214,9 +290,84 @@ public class GroupSettings extends Fragment {
     AdapterView.OnItemClickListener onItemClick = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+            User selectedUser = (User) parent.getItemAtPosition(position);
+            showMemberOptions(selectedUser);
         }
     };
+
+    private class ModeratorActions extends AsyncTask<Integer, Void, Boolean> {
+
+        String result = "";
+
+        @Override
+        protected Boolean doInBackground(Integer... params) {
+            boolean status = false;
+            int flag = params[0];
+            String link = NotesFeedSession.SERVER_ADDRESS + "/notesfeed/moderatoractions.php";
+            String body = "group_id=" + g.getGroup_id() + "&user_id=" + selectedUser.getUserId() + "&flag=" + flag;
+            byte[] bodyBytes = body.getBytes();
+
+            try {
+                URL url = new URL(link);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setDoOutput(true);
+                urlConnection.getOutputStream().write(bodyBytes);
+
+                BufferedReader response = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                StringBuilder responseString = new StringBuilder();
+
+                for (int i; (i = response.read()) >= 0;) {
+                    responseString.append((char) i);
+                }
+
+                System.out.println(responseString.toString());
+
+                if (responseString.toString().equals("moderator changed")) {
+                    result = responseString.toString();
+                    status = true;
+                } else if (responseString.toString().equals("removed member")) {
+                    result = responseString.toString();
+                    status = true;
+                } else {
+                    status = false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return status;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+
+            if (aBoolean && result.equals("moderator changed")) {
+                g.setGroup_moderator(selectedUser);
+                performModeration(g.getGroup_moderator().getUserId());
+            } else if (aBoolean && result.equals("removed member")) {
+                if (removeUser()) {
+                    performModeration(g.getGroup_moderator().getUserId());
+                }
+            }
+        }
+
+        private boolean removeUser() {
+            boolean removed = false;
+            int i = 0;
+
+            while (!removed) {
+                if (selectedUser.getUserId().equals(g.getGroup_members().get(i).getUserId())) {
+                    g.getGroup_members().remove(i);
+                    memberList_adapter.notifyDataSetChanged();
+                    removed = true;
+                }
+            }
+            return removed;
+        }
+    }
 
     private class GetOptions extends AsyncTask<String, Void, Boolean> {
 
@@ -281,6 +432,9 @@ public class GroupSettings extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                memberList.setAdapter(memberList_adapter);
+
             } else  {
                 System.out.println("Error in connection");
             }
