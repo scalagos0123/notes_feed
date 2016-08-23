@@ -178,6 +178,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
 
 //                Integrate the SQLite Database here
 //                Query should be inserted here
+//                Perform update operations of the database only in this part
 
             }
 

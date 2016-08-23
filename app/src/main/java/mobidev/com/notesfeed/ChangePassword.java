@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 /**
@@ -18,14 +19,15 @@ public class ChangePassword extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.change_password);
-        ChangePassword changePassword= new ChangePassword();
+
+        Button btnChangePassword = (Button)findViewById(R.id.button);
 
     }
 
     public void changePassword(View view){
-        EditText currentPassword = (EditText) findViewById(R.id.textView3);
-        EditText newPassword = (EditText) findViewById(R.id.textView4);
-        EditText confirmPassword = (EditText) findViewById(R.id.textView5);
+        EditText currentPassword = (EditText) findViewById(R.id.currentPass);
+        EditText newPassword = (EditText) findViewById(R.id.newPass);
+        EditText confirmPassword = (EditText) findViewById(R.id.retypePass);
         NotesFeedSession n = new NotesFeedSession(this);
 
         String currentPassword1 = n.getUserPassword();
@@ -33,17 +35,22 @@ public class ChangePassword extends AppCompatActivity {
         String confirmPassword1 = confirmPassword.getText().toString();
 
 
-        if(currentPassword.getText().toString().equals(currentPassword1) ) {
-          if(newPassword.getText().toString().equals(confirmPassword1)) {
-             //set
+        if(currentPassword.getText().toString().equals(currentPassword1) && currentPassword.getText().length()>=6) {
+          if(newPassword.getText().toString().equals(confirmPassword1) && newPassword.getText().length()>=6) {
+             //set minimum length (6 characters) - 123456
+
+
+              System.out.println(n.getUserPassword());
               n.editUserSessionPassword(newPassword1);
+              System.out.println(n.getUserPassword());
+              finish();
           } else {
-              currentPassword.setTextColor(getResources().getColor(R.color.redLine));
-              confirmPassword.setTextColor(getResources().getColor(R.color.redLine));
+              currentPassword.setBackgroundColor(getResources().getColor(R.color.redLine));
+              confirmPassword.setBackgroundColor(getResources().getColor(R.color.redLine));
           }
         } else {
             //call edittext, change color red
-            currentPassword.setTextColor(getResources().getColor(R.color.redLine));
+            currentPassword.setBackgroundColor(getResources().getColor(R.color.redLine));
         }
         //get currentpassword
         //enter new password
