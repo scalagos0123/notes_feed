@@ -36,6 +36,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
     private ArrayAdapter<Notes> notes_list = this;
     private int item_position;
     private DatabaseHelper databaseHelper;
+    SQLiteDatabase db;
 
     public Notes_ListAdapter(Context context, int resource, ArrayList<Notes> objects) {
         super(context, resource, objects);
@@ -44,6 +45,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
         this.inflater = LayoutInflater.from(context);
         this.resource = resource;
         databaseHelper = new DatabaseHelper(this.getContext());
+        db = databaseHelper.getWritableDatabase();
     }
 
     public class ViewHolder {
@@ -139,7 +141,6 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
         protected Boolean doInBackground(Notes... params) {
 
             Notes selectedNote = params[0];
-            SQLiteDatabase db =databaseHelper.getWritableDatabase();
             boolean status = false;
 
             if (selectedNote.getNote_owner() != null) {
@@ -217,7 +218,6 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
 
             Notes selectedNote = params[0];
             boolean status = false;
-            SQLiteDatabase db =databaseHelper.getWritableDatabase();
             if (selectedNote.getNote_owner() != null) {
                 int flag = 2;
 

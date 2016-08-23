@@ -134,11 +134,15 @@ public class Tab1 extends Fragment {
     }
 
     private class AddNote extends AsyncTask<Notes, Void, Void> {
+
+        Notes n = null;
+
         @Override
         protected Void doInBackground(Notes... params) {
 
             SQLiteDatabase db =databaseHelper.getWritableDatabase();
             int notes_id = lastNoteId;
+            this.n = params[0];
 
             db.execSQL("insert into my_notes (notes_id,notes_title,notes_content) values ('"+notes_id+"','','')");
 
@@ -171,7 +175,7 @@ public class Tab1 extends Fragment {
 
             System.out.println("Last ID: " +lastNoteId);
 
-            notes.add(0, new Notes(lastNoteId));
+            notes.add(0, n);
             notesAdapter.notifyDataSetChanged();
 
 //            what to do after the adding is complete
