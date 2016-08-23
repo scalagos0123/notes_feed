@@ -29,7 +29,7 @@ public class ChangePassword extends AppCompatActivity {
         setContentView(R.layout.change_password);
         n = new NotesFeedSession(this);
 
-        Button btnChangePassword = (Button) findViewById(R.id.button);
+        System.out.println("Current Password: "+n.getUserPassword());
 
     }
 
@@ -40,7 +40,7 @@ public class ChangePassword extends AppCompatActivity {
         NotesFeedSession n = new NotesFeedSession(this);
 
         String currentPassword1 = n.getUserPassword();
-        System.out.println(currentPassword1);
+
         newPassword1 = newPassword.getText().toString();
         String confirmPassword1 = confirmPassword.getText().toString();
 
