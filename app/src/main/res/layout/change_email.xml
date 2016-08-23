@@ -2,16 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+    <android.support.v7.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Change email:"
-        android:id="@+id/textView6"
-        android:textSize="30sp"
-     />
+        android:padding="15dp"
+        app:cardBackgroundColor="@color/cardview_light_background">
+
+    </android.support.v7.widget.CardView>
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,11 +27,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/currentEmail"
         android:inputType="textCapSentences|text"
-        android:text="Current email"
         android:layout_below="@+id/textView7"
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/textView6"
-        android:textColor="#FFA27373" />
+        android:textColor="#FFA27373"
+        android:hint="Enter current email"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -51,11 +50,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/newEmail"
         android:inputType="textCapSentences|text"
-        android:text="New email"
         android:layout_below="@+id/textView8"
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/currentEmail"
-        android:textColor="#FFA27373" />
+        android:textColor="#FFA27373"
+        android:hint="Enter new email"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -71,13 +70,13 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText1"
+        android:id="@+id/retypeEmail"
         android:inputType="textCapSentences|text"
-        android:text="Retype email"
         android:layout_below="@+id/textView9"
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/newEmail"
-        android:textColor="#FFA27373" />
+        android:textColor="#FFA27373"
+        android:hint="Retype new email"/>
 
     <Button
 
@@ -86,8 +85,8 @@
         android:text="@string/submit"
         android:id="@+id/button"
         android:background="@color/whiteIcon"
-        android:layout_below="@+id/editText1"
-        android:layout_toEndOf="@+id/editText1" />
+        android:layout_below="@+id/retypeEmail"
+        android:layout_toEndOf="@+id/retypeEmail" />
 
     <Button
 
@@ -96,7 +95,7 @@
         android:text="@string/back"
         android:background="@color/whiteIcon"
         android:id="@+id/button1"
-        android:layout_below="@+id/editText1"
+        android:layout_below="@+id/retypeEmail"
         android:layout_alignEnd="@+id/textView7" />
 
 
