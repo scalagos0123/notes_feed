@@ -4,6 +4,7 @@ package mobidev.com.notesfeed;
  * Created by Debbie Co on 7/7/2016.
  */
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -49,14 +50,19 @@ public class Tab3 extends Fragment {
                 if (itemSelected.equals(myItems[0])) {
 
 //                    start the intent here kung change password yung sinelect
-                    n = new NotesFeedSession(getContext());
 
+                    Intent changePassword = new Intent(getContext(), ChangePassword.class);
+                    n = new NotesFeedSession(getContext());
+                    startActivity(changePassword);
 
 
                 } else if (itemSelected.equals(myItems[1])) {
 
 //                    start the intent here kung change email yung sinelect
+                    Intent changeEmail = new Intent(getContext(), ChangeEmail.class);
                     n = new NotesFeedSession(getContext());
+                    startActivity(changeEmail);
+
                 } else if (itemSelected.equals(myItems[2])) {
 //                    Don't mess this part
                     n = new NotesFeedSession(getContext());
