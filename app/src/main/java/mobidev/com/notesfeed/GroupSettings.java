@@ -176,6 +176,8 @@ public class GroupSettings extends Fragment {
         deleteDialog.show();
     }
 
+
+
     private void showLeaveGroupDialogBox() {
         AlertDialog.Builder leaveDialog = new AlertDialog.Builder(this.getContext());
         leaveDialog.setMessage("Do you really want to leave?");
