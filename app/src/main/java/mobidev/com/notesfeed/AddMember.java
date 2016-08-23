@@ -38,6 +38,7 @@ public class AddMember extends AppCompatActivity {
     private ArrayList<User> userDatabase;
     private ArrayList<User> results;
     private String groupId;
+    private final static int ADD_USER_SUCCESS = 200;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +62,7 @@ public class AddMember extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(ADD_USER_SUCCESS);
                 finish();
             }
         });
@@ -192,6 +194,7 @@ public class AddMember extends AppCompatActivity {
             super.onPostExecute(s);
             if (s.equals("member added")) {
                 System.out.println(s);
+                setResult(ADD_USER_SUCCESS);
                 finish();
             } else {
                 System.out.println(s);

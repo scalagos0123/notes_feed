@@ -50,6 +50,7 @@ public class GroupSettings extends Fragment {
     private NotesFeedSession n;
     private User selectedUser;
     private MemberAdapter memberList_adapter;
+    private StringBuilder toString;
     AlertDialog dialog;
 
     @Override
@@ -65,8 +66,7 @@ public class GroupSettings extends Fragment {
 
         n = new NotesFeedSession(this.getContext());
 
-        GetOptions settingsAsynctask = new GetOptions();
-        settingsAsynctask.execute(g.getGroup_id());
+        refreshOptions();
 
         memberList_adapter = new MemberAdapter(this.getContext(), R.layout.member_list, g.getGroup_members());
     }
@@ -78,6 +78,11 @@ public class GroupSettings extends Fragment {
         initializeViews(view);
 
         return view;
+    }
+
+    public void addMember(User addedMember) {
+        g.getGroup_members().add(addedMember);
+        memberList_adapter.notifyDataSetChanged();
     }
 
     private void initializeViews(View view) {
@@ -258,6 +263,44 @@ public class GroupSettings extends Fragment {
         moderatorChange.show();
     }
 
+    public void refreshOptions () {
+        GetOptions settingsAsynctask = new GetOptions();
+        settingsAsynctask.execute(g.getGroup_id());
+    }
+
+    public void addSettings() {
+        g.getGroup_members().clear();
+        memberList.setAdapter(memberList_adapter);
+
+        try {
+
+            JSONObject groupSettings = new JSONObject(toString.toString());
+            JSONArray userId = groupSettings.getJSONArray("user_id");
+            JSONArray userName = groupSettings.getJSONArray("user_name");
+            JSONArray groupPrivacy = groupSettings.getJSONArray("group_privacy");
+            JSONArray groupModerator = groupSettings.getJSONArray("group_moderator");
+
+            for (int i = 0; i < userName.length(); i++) {
+                User member = new User(userId.getString(i), userName.getString(i));
+                g.addGroup_member(member);
+
+                if (member.getUserId().equals(groupModerator.getString(0))) {
+                    g.setGroup_moderator(member);
+                    g.getGroup_members().remove(i);
+                }
+            }
+
+            g.setPrivacy(groupPrivacy.getInt(0));
+            performModeration(g.getGroup_moderator().getUserId());
+            moderatorName.setText(g.getGroup_moderator().getName());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        memberList_adapter.notifyDataSetChanged();
+    }
+
     View.OnClickListener clickListeners = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -374,6 +417,8 @@ public class GroupSettings extends Fragment {
                     g.getGroup_members().remove(i);
                     memberList_adapter.notifyDataSetChanged();
                     removed = true;
+                } else {
+                    i++;
                 }
             }
             return removed;
@@ -381,8 +426,6 @@ public class GroupSettings extends Fragment {
     }
 
     private class GetOptions extends AsyncTask<String, Void, Boolean> {
-
-        StringBuilder toString;
 
         @Override
         protected Boolean doInBackground(String... params) {
@@ -420,33 +463,7 @@ public class GroupSettings extends Fragment {
             super.onPostExecute(aBoolean);
 
             if (aBoolean) {
-                try {
-
-                    JSONObject groupSettings = new JSONObject(toString.toString());
-                    JSONArray userId = groupSettings.getJSONArray("user_id");
-                    JSONArray userName = groupSettings.getJSONArray("user_name");
-                    JSONArray groupPrivacy = groupSettings.getJSONArray("group_privacy");
-                    JSONArray groupModerator = groupSettings.getJSONArray("group_moderator");
-
-                    for (int i = 0; i < userName.length(); i++) {
-                        User member = new User(userId.getString(i), userName.getString(i));
-                        g.addGroup_member(member);
-
-                        if (member.getUserId().equals(groupModerator.getString(0))) {
-                            g.setGroup_moderator(member);
-                            g.getGroup_members().remove(i);
-                        }
-                    }
-
-                    g.setPrivacy(groupPrivacy.getInt(0));
-                    performModeration(g.getGroup_moderator().getUserId());
-                    moderatorName.setText(g.getGroup_moderator().getName());
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                memberList.setAdapter(memberList_adapter);
+                addSettings();
 
             } else  {
                 System.out.println("Error in connection");
