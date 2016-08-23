@@ -42,11 +42,6 @@ public class Tab1 extends Fragment {
         databaseHelper = new DatabaseHelper(getContext());
         GetPersonalNotes getNotes = new GetPersonalNotes();
         getNotes.execute();
-
-        for (int i = 0; i < 4; i++) {
-            Notes n = new Notes(i, "Note title #" +i, "Content of #" + i + " here");
-            notes.add(n);
-        }
     }
 
     //Overriden method onCreateView
@@ -66,9 +61,8 @@ public class Tab1 extends Fragment {
         addNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Notes n = new Notes(000, "", "");
-                notesAdapter.insert(n, 0);
-                notesAdapter.notifyDataSetChanged();
+                AddNote a = new AddNote();
+                a.execute(new Notes(lastNoteId));
             }
         });
 
@@ -93,15 +87,21 @@ public class Tab1 extends Fragment {
                 lastNoteId = c.getInt(0) + 1;
             }
 
+            System.out.println("Last ID: " +lastNoteId);
+
             c.close();
 
             Cursor d =db.rawQuery("select * from my_notes",null);
 
-            while(i <= lastNoteId){
-                Notes n =new Notes(d.getInt(d.getColumnIndex(databaseHelper.COL_1)), d.getString(d.getColumnIndex(databaseHelper.COL_2)),d.getString(d.getColumnIndex(databaseHelper.COL_3)));
-                notes.add(n);
-                d.moveToNext();
-                i++;
+            if(d.getCount() > 0) {
+                System.out.println("1");
+
+                while (d.moveToNext()) {
+                    Notes n = new Notes(d.getInt(d.getColumnIndex(databaseHelper.COL_1)), d.getString(d.getColumnIndex(databaseHelper.COL_2)), d.getString(d.getColumnIndex(databaseHelper.COL_3)));
+                    notes.add(0, n);
+                }
+            } else {
+                System.out.println("2");
             }
 //            End of getting the last id
 
@@ -134,14 +134,15 @@ public class Tab1 extends Fragment {
     }
 
     private class AddNote extends AsyncTask<Notes, Void, Void> {
-
         @Override
         protected Void doInBackground(Notes... params) {
 
             SQLiteDatabase db =databaseHelper.getWritableDatabase();
-            Cursor d= db.rawQuery("insert into my_notes (notes_id,notes_title,notes_content) values ('notes_id','','')" ,null);
             int notes_id = lastNoteId;
-            Notes n = new Notes(notes_id);
+
+            db.execSQL("insert into my_notes (notes_id,notes_title,notes_content) values ('"+notes_id+"','','')");
+
+
             /*
 
             Execute the inserting of a new note here.
@@ -166,6 +167,12 @@ public class Tab1 extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            lastNoteId = lastNoteId + 1;
+
+            System.out.println("Last ID: " +lastNoteId);
+
+            notes.add(0, new Notes(lastNoteId));
+            notesAdapter.notifyDataSetChanged();
 
 //            what to do after the adding is complete
 //            this is optional

@@ -1,6 +1,7 @@
 package mobidev.com.notesfeed;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
@@ -34,6 +35,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
     private int resource;
     private ArrayAdapter<Notes> notes_list = this;
     private int item_position;
+    private DatabaseHelper databaseHelper;
 
     public Notes_ListAdapter(Context context, int resource, ArrayList<Notes> objects) {
         super(context, resource, objects);
@@ -41,6 +43,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.resource = resource;
+        databaseHelper = new DatabaseHelper(this.getContext());
     }
 
     public class ViewHolder {
@@ -136,6 +139,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
         protected Boolean doInBackground(Notes... params) {
 
             Notes selectedNote = params[0];
+            SQLiteDatabase db =databaseHelper.getWritableDatabase();
             boolean status = false;
 
             if (selectedNote.getNote_owner() != null) {
@@ -176,6 +180,10 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
                 }
             } else {
 
+                System.out.println("Selected note title: " + selectedNote.getNotes_title());
+                System.out.println("Selected note content: " + selectedNote.getNotes_content());
+
+                db.execSQL("UPDATE my_notes set notes_title='"+selectedNote.getNotes_title()+"', notes_content='"+selectedNote.getNotes_content()+"' where notes_id='"+selectedNote.getNotes_id()+"'");
 //                Integrate the SQLite Database here
 //                Query should be inserted here
 //                Perform update operations of the database only in this part
@@ -209,7 +217,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
 
             Notes selectedNote = params[0];
             boolean status = false;
-
+            SQLiteDatabase db =databaseHelper.getWritableDatabase();
             if (selectedNote.getNote_owner() != null) {
                 int flag = 2;
 
@@ -248,6 +256,8 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
                 }
 
             } else {
+
+                db.execSQL("DELETE from my_notes where notes_id='"+selectedNote.getNotes_id()+"'");
 //                Integrate the SQLite Database here
 //                Perform the delete statement strictly here
             }
