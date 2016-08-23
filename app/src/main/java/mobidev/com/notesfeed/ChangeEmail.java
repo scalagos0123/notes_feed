@@ -27,14 +27,23 @@ public class ChangeEmail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.change_email);
 
-        Button btnChangeEmail = (Button)findViewById(R.id.button1);
+        Button btnChangeEmail = (Button)findViewById(R.id.button);
+        btnChangeEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeEmail();
+            }
+        });
     }
 
     public void done() {
+        Toast.makeText(this, "Email changed", Toast.LENGTH_SHORT);
+        n.editUserSessionEmail(newEmail1);
+        System.out.println(n.getUserEmail());
         finish();
     }
 
-    public void changeEmail(View view) {
+    public void changeEmail() {
         EditText currentEmail = (EditText) findViewById(R.id.currentEmail);
         EditText newEmail = (EditText) findViewById(R.id.newEmail);
         EditText retypeEmail = (EditText) findViewById(R.id.retypeEmail);
@@ -111,10 +120,7 @@ public class ChangeEmail extends AppCompatActivity {
             super.onPostExecute(aBoolean);
 
             if (aBoolean) {
-                n.editUserSessionEmail(newEmail1);
-                System.out.println(n.getUserEmail());
-
-                Toast.makeText(c, "Email changed", Toast.LENGTH_SHORT);
+                done();
             }
         }
     }
