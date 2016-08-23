@@ -1,6 +1,7 @@
 package mobidev.com.notesfeed;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
@@ -34,6 +35,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
     private int resource;
     private ArrayAdapter<Notes> notes_list = this;
     private int item_position;
+    private DatabaseHelper databaseHelper;
 
     public Notes_ListAdapter(Context context, int resource, ArrayList<Notes> objects) {
         super(context, resource, objects);
@@ -41,6 +43,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.resource = resource;
+        databaseHelper = new DatabaseHelper(this.getContext());
     }
 
     public class ViewHolder {
@@ -58,7 +61,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         convertView = inflater.inflate(resource, parent, false);
 
         final ViewHolder viewElements = new ViewHolder();
@@ -104,9 +107,9 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
 
                 n.setNotes_title(viewElements.notes_title.getText().toString());
                 n.setNotes_content(viewElements.notes_content.getText().toString());
-                UpdateNote thisAction = new UpdateNote(position);
+                UpdateNote thisAction = new UpdateNote(context);
                 thisAction.execute(n);
-                viewElements.note_action.setVisibility(View.INVISIBLE);
+                viewElements.note_action.setVisibility(View.GONE);
 
             }
         });
@@ -114,7 +117,8 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
         viewElements.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DeleteNote d = new DeleteNote(position);
+
+                DeleteNote d = new DeleteNote(getContext());
                 d.execute(n);
             }
         });
@@ -126,16 +130,16 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
     private class UpdateNote extends AsyncTask<Notes, Void, Boolean> {
 
         private Context c;
-        private int item_position;
 
-        public UpdateNote(int item_position) {
-            this.item_position = item_position;
+        public UpdateNote(Context c) {
+            this.c = c;
         }
 
         @Override
         protected Boolean doInBackground(Notes... params) {
 
             Notes selectedNote = params[0];
+            SQLiteDatabase db =databaseHelper.getWritableDatabase();
             boolean status = false;
 
             if (selectedNote.getNote_owner() != null) {
@@ -176,8 +180,13 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
                 }
             } else {
 
+                System.out.println("Selected note title: " + selectedNote.getNotes_title());
+                System.out.println("Selected note content: " + selectedNote.getNotes_content());
+
+                db.execSQL("UPDATE my_notes set notes_title='"+selectedNote.getNotes_title()+"', notes_content='"+selectedNote.getNotes_content()+"' where notes_id='"+selectedNote.getNotes_id()+"'");
 //                Integrate the SQLite Database here
 //                Query should be inserted here
+//                Perform update operations of the database only in this part
 
             }
 
@@ -187,9 +196,10 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
 
             if (aBoolean == true) {
-                Toast.makeText(context, "Note's updated!", Toast.LENGTH_SHORT);
+                Toast.makeText(c, "Note's updated!", Toast.LENGTH_SHORT);
             }
         }
     }
@@ -197,21 +207,17 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
     private class DeleteNote extends AsyncTask<Notes, Void, Boolean> {
 
         private Context c;
-        private boolean status;
-        private int item_position;
 
-        public DeleteNote(int item_position) {
-            this.item_position = item_position;
+        public DeleteNote(Context c) {
             this.c = c;
-            status = false;
         }
 
         @Override
         protected Boolean doInBackground(Notes... params) {
 
             Notes selectedNote = params[0];
-            status = false;
-
+            boolean status = false;
+            SQLiteDatabase db =databaseHelper.getWritableDatabase();
             if (selectedNote.getNote_owner() != null) {
                 int flag = 2;
 
@@ -238,23 +244,20 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
                         outputConnectionReader.append((char) c);
                     }
 
-                    System.out.println(outputConnectionReader.toString());
-
                     if (outputConnectionReader.toString().equals("deleted")) {
                         status = true;
-                        System.out.println(status);
                     } else {
-                        status = false;
                         System.out.println(outputConnectionReader);
                     }
 
                 } catch (Exception e) {
-                    status = false;
                     System.out.println("Delete failed");
                     e.printStackTrace();
                 }
 
             } else {
+
+                db.execSQL("DELETE from my_notes where notes_id='"+selectedNote.getNotes_id()+"'");
 //                Integrate the SQLite Database here
 //                Perform the delete statement strictly here
             }
@@ -265,12 +268,13 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
 
-            if (status == true) {
+            if (aBoolean == true) {
                 notesList.remove(item_position);
                 notes_list.notifyDataSetChanged();
 
-                Toast.makeText(context, "Note's deleted!", Toast.LENGTH_SHORT);
+                Toast.makeText(c, "Note's deleted!", Toast.LENGTH_SHORT);
             }
         }
     }
