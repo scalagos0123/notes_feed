@@ -7,4 +7,5 @@
     <color name="transparent">#0000</color>
     <color name="whiteIcon">#FFF</color>
     <color name="redLine">#ff0000</color>
+    <color name="black">#000</color>
 </resources>

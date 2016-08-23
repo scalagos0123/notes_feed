@@ -34,6 +34,7 @@
     <string name="title_activity_create_group">Create Group</string>
 
     <string name="find_group_searchbar">Search for a group name</string>
+    <string name="privacy_switch_text">Slide to switch privacy</string>
 
 
 </resources>
