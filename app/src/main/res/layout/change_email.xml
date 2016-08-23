@@ -42,6 +42,7 @@
         android:text="CHANGE EMAIL"
         android:id="@+id/button"
         android:layout_below="@+id/retypePass"
-        android:background="@color/whiteIcon" />
+        android:background="@color/whiteIcon"
+        android:onClick="changeEmail"/>
 
 </LinearLayout>
