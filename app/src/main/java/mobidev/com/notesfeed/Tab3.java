@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * Created by Belal on 2/3/2016.
@@ -33,6 +34,11 @@ public class Tab3 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment_3, container, false);
         populateListView(view);
+        TextView personLoggedIn = (TextView) view.findViewById(R.id.personLoggedIn);
+        TextView emailPersonLoggedIn = (TextView) view.findViewById(R.id.emailPersonLoggedIn);
+
+        emailPersonLoggedIn.setText(n.getUserEmail());
+        personLoggedIn.setText(n.getUserFullName());
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -77,6 +83,7 @@ public class Tab3 extends Fragment {
     }
 
     private void populateListView(View v){
+        n = new NotesFeedSession(getContext());
         String[] myItems = {"Change Password", "Change Email", "Sign Out"};
         this.myItems = myItems;
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, myItems);
