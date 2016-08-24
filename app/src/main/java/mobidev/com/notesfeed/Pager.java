@@ -6,6 +6,8 @@ package mobidev.com.notesfeed;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.SparseArray;
+import android.view.ViewGroup;
 
 /**
  * Created by Belal on 2/3/2016.
@@ -16,6 +18,7 @@ public class Pager extends FragmentStatePagerAdapter {
     //integer to count number of tabs
     int tabCount;
     FragmentManager fm;
+    private SparseArray<Fragment> fragments;
 
     //Constructor to the class
     public Pager(FragmentManager fm, int tabCount) {
@@ -23,6 +26,7 @@ public class Pager extends FragmentStatePagerAdapter {
         this.fm = fm;
         //Initializing tab count
         this.tabCount= tabCount;
+        this.fragments = new SparseArray<>();
     }
 
     //Overriding method getItem
@@ -53,6 +57,10 @@ public class Pager extends FragmentStatePagerAdapter {
         return tabCount;
     }
 
+    public Fragment getFragmentAtPosition(int position) {
+        return fragments.get(position);
+    }
+
     @Override
     public CharSequence getPageTitle(int position) {
         String tabTitle = "";
@@ -70,5 +78,18 @@ public class Pager extends FragmentStatePagerAdapter {
         }
 
         return tabTitle;
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        Fragment fragment = (Fragment) super.instantiateItem(container, position);
+        fragments.put(position, fragment);
+        return fragment;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        super.destroyItem(container, position, object);
+        fragments.remove(position);
     }
 }

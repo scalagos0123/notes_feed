@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     //This is our viewPager
     private ViewPager viewPager;
+    private Pager adapter;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (resultCode == CHANGE_EMAIL_SUCCESS) {
             Toast.makeText(this, "Email updated", Toast.LENGTH_LONG).show();
+            Tab3 settingsTab = (Tab3) adapter.getFragmentAtPosition(2);
+            settingsTab.changeEmail((String) data.getCharSequenceExtra("email"));
         } else if (resultCode == CHANGE_PASSWORD_SUCCESS) {
             Toast.makeText(this, "Password updated", Toast.LENGTH_LONG).show();
         } else if (resultCode == RESULT_CANCELED && requestCode == 101) {
@@ -51,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         //Creating our pager adapter
-        Pager adapter = new Pager(getSupportFragmentManager(), 3);
+        adapter = new Pager(getSupportFragmentManager(), 3);
 
         //Adding adapter to pager
         viewPager.setAdapter(adapter);

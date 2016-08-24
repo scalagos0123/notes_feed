@@ -1,5 +1,6 @@
 package mobidev.com.notesfeed;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -39,7 +40,9 @@ public class ChangeEmail extends AppCompatActivity {
     public void done() {
         n.editUserSessionEmail(newEmail1);
         System.out.println(n.getUserEmail());
-        setResult(MainActivity.CHANGE_EMAIL_SUCCESS);
+        Intent data = new Intent();
+        data.putExtra("email", n.getUserEmail());
+        setResult(MainActivity.CHANGE_EMAIL_SUCCESS, data);
         finish();
     }
 

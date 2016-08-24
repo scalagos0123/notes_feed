@@ -29,13 +29,14 @@ public class Tab3 extends Fragment {
     ListView list = null;
     String[] myItems = null;
     NotesFeedSession n;
+    TextView emailPersonLoggedIn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment_3, container, false);
         populateListView(view);
         TextView personLoggedIn = (TextView) view.findViewById(R.id.personLoggedIn);
-        TextView emailPersonLoggedIn = (TextView) view.findViewById(R.id.emailPersonLoggedIn);
+        emailPersonLoggedIn = (TextView) view.findViewById(R.id.emailPersonLoggedIn);
 
         emailPersonLoggedIn.setText(n.getUserEmail());
         personLoggedIn.setText(n.getUserFullName());
@@ -91,5 +92,9 @@ public class Tab3 extends Fragment {
 
         list = (ListView) v.findViewById(R.id.listViewMain);
         list.setAdapter(adapter);
+    }
+
+    public void changeEmail(String newEmail) {
+        emailPersonLoggedIn.setText(newEmail);
     }
 }
