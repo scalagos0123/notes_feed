@@ -4,6 +4,7 @@ package mobidev.com.notesfeed;
  * Created by Debbie Co on 7/7/2016.
  */
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public class Tab1 extends Fragment {
     private Notes_ListAdapter notesAdapter;
     private int lastNoteId;
     private DatabaseHelper databaseHelper;
-    private int i=0;
+    LinearLayout emptyNotes;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +55,7 @@ public class Tab1 extends Fragment {
         View view = inflater.inflate(R.layout.tab_fragment_1, container, false);
 
         //code for notes and stuff
-
+        this.emptyNotes = (LinearLayout) view.findViewById(R.id.notes_empty);
         this.notes_list = (ListView) view.findViewById(R.id.notes_listview);
         notesAdapter = new Notes_ListAdapter(getContext(), R.layout.note_layout, notes);
 
@@ -69,6 +71,14 @@ public class Tab1 extends Fragment {
         return view;
 
 
+    }
+
+    private void notesNotEmpty() {
+        if (lastNoteId == 0) {
+            this.emptyNotes.setVisibility(View.VISIBLE);
+        } else {
+            this.emptyNotes.setVisibility(View.GONE);
+        }
     }
 
     private class GetPersonalNotes extends AsyncTask<Void, Void, Void> {
@@ -129,6 +139,7 @@ public class Tab1 extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            notesNotEmpty();
             notes_list.setAdapter(notesAdapter);
         }
     }
@@ -144,7 +155,11 @@ public class Tab1 extends Fragment {
             int notes_id = lastNoteId;
             this.n = params[0];
 
-            db.execSQL("insert into my_notes (notes_id,notes_title,notes_content) values ('"+notes_id+"','','')");
+            try {
+                db.execSQL("insert into my_notes (notes_id,notes_title,notes_content) values ('"+notes_id+"','','')");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
 
             /*
@@ -177,6 +192,7 @@ public class Tab1 extends Fragment {
 
             notes.add(0, n);
             notesAdapter.notifyDataSetChanged();
+            notesNotEmpty();
 
 //            what to do after the adding is complete
 //            this is optional
