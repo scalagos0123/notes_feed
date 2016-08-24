@@ -42,7 +42,9 @@
     <ListView
         android:id="@+id/group_notes_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:dividerHeight="0dp"></ListView>
 
     <TextView
         android:layout_width="wrap_content"
