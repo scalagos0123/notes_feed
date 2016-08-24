@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -69,6 +70,14 @@ public class ChangePassword extends AppCompatActivity {
 
     }
 
+    public void done() {
+        Toast.makeText(this, "Password changed", Toast.LENGTH_SHORT).show();
+        System.out.println(n.getUserPassword());
+        n.editUserSessionPassword(newPassword1);
+        System.out.println(n.getUserPassword());
+
+    }
+
     public class Change_password extends AsyncTask<String, Void, Boolean> {
         @Override
         protected Boolean doInBackground(String... params) {
@@ -111,10 +120,7 @@ public class ChangePassword extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if (aBoolean) {
-
-                System.out.println(n.getUserPassword());
-                n.editUserSessionPassword(newPassword1);
-                System.out.println(n.getUserPassword());
+                done();
             }
         }
     }
