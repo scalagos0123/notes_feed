@@ -136,7 +136,7 @@ public class FindGroup extends AppCompatActivity {
         } else if (input.length() > 0) {
             searchResults.clear();
             for (int i = 0; i < groupList.size(); i++) {
-                if (groupList.get(i).getGroup_name().contains(input)) {
+                if (groupList.get(i).getGroup_name().toLowerCase().contains(input.toLowerCase())) {
                     searchResults.add(groupList.get(i));
                 }
             }

@@ -47,6 +47,7 @@ public class Tab2 extends Fragment {
     LayoutInflater inflater;
     ViewGroup container;
     Context context;
+    AlertDialog createDialog;
 
     int lastGroupId;
     NotesFeedSession sessionHandler;
@@ -135,7 +136,8 @@ public class Tab2 extends Fragment {
             }
         });
 
-        createGroup.show();
+        createDialog = createGroup.create();
+        createDialog.show();
 
     }
 
@@ -159,8 +161,17 @@ public class Tab2 extends Fragment {
         }
     };
 
-    public void makeResponse() {
-        Toast.makeText(this.getContext(), "Group created", Toast.LENGTH_SHORT).show();
+    public void makeResponse(int flag) {
+
+        String status = "";
+        if (flag == 0) {
+            status = "Group created";
+        } else {
+            status = "Group already exists";
+        }
+
+        Toast.makeText(this.getContext(), status, Toast.LENGTH_SHORT).show();
+        createDialog.dismiss();
     }
 
     private class CreateGroupAsyncTask extends AsyncTask<Group, Void, Boolean> {
@@ -223,10 +234,12 @@ public class Tab2 extends Fragment {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
 
-            if (aBoolean == true) {
+            if (aBoolean) {
                 groups.add(addedGroup);
                 group_adapter.notifyDataSetChanged();
-                makeResponse();
+                makeResponse(0);
+            } else {
+                makeResponse(1);
             }
         }
     }

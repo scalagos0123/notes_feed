@@ -93,7 +93,7 @@ public class AddMember extends AppCompatActivity {
             results.clear();
 
             for (int i = 0; i < userDatabase.size(); i++) {
-                if (input.equals(userDatabase.get(i).getName())) {
+                if (input.toLowerCase().equals(userDatabase.get(i).getName().toLowerCase())) {
                     results.add(userDatabase.get(i));
                 }
             }
