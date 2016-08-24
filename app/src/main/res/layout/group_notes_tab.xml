@@ -14,6 +14,31 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_add_black_24dp"/>
 
+    <LinearLayout
+        android:id="@+id/notes_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="You don't have notes yet!"
+            android:layout_gravity="center"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Add one by pressing +"
+            android:layout_gravity="center"
+            android:textSize="15dp"/>
+
+    </LinearLayout>
+
     <ListView
         android:id="@+id/group_notes_list"
         android:layout_width="match_parent"

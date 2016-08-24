@@ -8,7 +8,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,6 +32,7 @@ public class GroupNotes extends Fragment {
     private Notes_ListAdapter groupNotesAdapter;
     private FloatingActionButton fab;
     private int last_noteId;
+    LinearLayout emptyNotes;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +49,10 @@ public class GroupNotes extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         System.out.println(g.getGroup_name() + " id: " + g.getGroup_id());
         View view = inflater.inflate(R.layout.group_notes_tab,container, false);
+
+        emptyNotes = (LinearLayout) view.findViewById(R.id.notes_empty);
+        TextView n = (TextView) emptyNotes.getChildAt(0);
+        n.setText("This group doesn't have notes yet!");
 
         notesListView = (ListView) view.findViewById(R.id.group_notes_list);
         groupNotesAdapter = new Notes_ListAdapter(getContext(), R.layout.note_layout, groupNotes);
@@ -69,6 +76,14 @@ public class GroupNotes extends Fragment {
         });
 
         return view;
+    }
+
+    private void notesNotEmpty() {
+        if (groupNotes.size() == 0) {
+            this.emptyNotes.setVisibility(View.VISIBLE);
+        } else {
+            this.emptyNotes.setVisibility(View.GONE);
+        }
     }
 
     protected class GetGroupNotes extends AsyncTask<String, Void, Void> {
@@ -131,6 +146,7 @@ public class GroupNotes extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             notesListView.setAdapter(groupNotesAdapter);
+            notesNotEmpty();
         }
     }
 
@@ -169,6 +185,7 @@ public class GroupNotes extends Fragment {
                 if (outputConnectionReader.toString().equals("added")) {
                     status = true;
                     last_noteId++;
+                    notesNotEmpty();
                 } else {
                     System.out.println(outputConnectionReader);
                 }
