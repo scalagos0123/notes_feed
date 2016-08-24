@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
 
     public final static int CHANGE_EMAIL_SUCCESS = 500;
     public final static int CHANGE_PASSWORD_SUCCESS = 501;
+    public final static int CHANGE_EMAIL_NOTHING = 0;
+    public final static int CHANGE_PASSWORD_NOTHING = 1;
 
     //This is our tablayout
     private TabLayout tabLayout;
@@ -32,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Email updated", Toast.LENGTH_LONG).show();
         } else if (resultCode == CHANGE_PASSWORD_SUCCESS) {
             Toast.makeText(this, "Password updated", Toast.LENGTH_LONG).show();
+        } else if (resultCode == RESULT_CANCELED && requestCode == 101) {
+            Toast.makeText(this, "Email didn't change", Toast.LENGTH_LONG).show();
+        } else if (resultCode == RESULT_CANCELED && requestCode == 100) {
+            Toast.makeText(this, "Password didn't change", Toast.LENGTH_LONG).show();
         }
     }
 

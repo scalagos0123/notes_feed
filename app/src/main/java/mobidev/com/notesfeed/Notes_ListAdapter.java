@@ -112,7 +112,7 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
                 n.setNotes_content(viewElements.notes_content.getText().toString());
                 UpdateNote thisAction = new UpdateNote(context);
                 thisAction.execute(n);
-                viewElements.note_action.setVisibility(View.GONE);
+                viewElements.note_action.setVisibility(View.INVISIBLE);
 
             }
         });

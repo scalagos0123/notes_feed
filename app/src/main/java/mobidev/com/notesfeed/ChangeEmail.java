@@ -43,6 +43,18 @@ public class ChangeEmail extends AppCompatActivity {
         finish();
     }
 
+    public void changeReject(View view) {
+        setResult(RESULT_CANCELED);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        finish();
+    }
+
+
     public void changeEmail() {
         EditText currentEmail = (EditText) findViewById(R.id.currentEmail);
         EditText newEmail = (EditText) findViewById(R.id.newEmail);
