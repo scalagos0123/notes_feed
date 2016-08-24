@@ -199,6 +199,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //        startActivity(i);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == 404) {
+            mEmailView.setText("");
+            mPasswordView.setText("");
+        }
+    }
+
     public void toRegisterForm(View view) {
         Intent toRegister = new Intent(this, SignUp.class);
         startActivity(toRegister);

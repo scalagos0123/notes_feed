@@ -74,6 +74,7 @@ public class Tab3 extends Fragment {
 //                    Don't mess this part
                     n = new NotesFeedSession(getContext());
                     n.endUserSession();
+                    getActivity().setResult(404);
                     getActivity().finish();
                 }
             }
