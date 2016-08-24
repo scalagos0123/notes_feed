@@ -71,7 +71,7 @@ public class ChangePassword extends AppCompatActivity {
     }
 
     public void done() {
-        Toast.makeText(this, "Password changed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Password changed", Toast.LENGTH_LONG).show();
         System.out.println(n.getUserPassword());
         n.editUserSessionPassword(newPassword1);
         System.out.println(n.getUserPassword());

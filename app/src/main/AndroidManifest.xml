@@ -43,6 +43,13 @@
         <activity android:name=".AddMember"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".GroupActivity"></activity>
+        <activity android:name=".ChangePassword"
+            android:parentActivityName=".MainActivity"
+            android:label="Change Password"></activity>
+        <activity android:name=".ChangeEmail"
+            android:label="Change Email"
+            android:parentActivityName=".MainActivity">
+        </activity>
     </application>
 
 </manifest>
