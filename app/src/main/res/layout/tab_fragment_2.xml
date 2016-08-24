@@ -29,7 +29,9 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/fab_margin"
         android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        app:menu_colorNormal="@color/colorPrimary"
+        app:menu_colorPressed="@color/colorPrimary">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/group_create"
@@ -37,6 +39,9 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_group_add_black_24dp"
             app:fab_label="Create a group"
+            app:fab_size="mini"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/colorAccent"
             />
 
         <com.github.clans.fab.FloatingActionButton
@@ -44,7 +49,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/magnifying_glass_icon"
-            app:fab_label="Search"/>
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/colorAccent"
+            app:fab_label="Search"
+            app:fab_size="mini"/>
 
     </com.github.clans.fab.FloatingActionMenu>
 
