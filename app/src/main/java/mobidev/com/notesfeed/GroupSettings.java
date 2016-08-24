@@ -231,8 +231,8 @@ public class GroupSettings extends Fragment {
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
         View v = inflater.inflate(R.layout.memberaction_dialog, null);
 
-        RelativeLayout removeMember = (RelativeLayout) v.findViewById(R.id.remove_member);
-        RelativeLayout setModerator = (RelativeLayout) v.findViewById(R.id.set_moderator);
+        CardView removeMember = (CardView) v.findViewById(R.id.remove_member);
+        CardView setModerator = (CardView) v.findViewById(R.id.set_moderator);
 
         removeMember.setOnClickListener(clickListeners);
         setModerator.setOnClickListener(clickListeners);
