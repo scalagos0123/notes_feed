@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 public class GroupActivity extends AppCompatActivity {
 
@@ -19,12 +21,11 @@ public class GroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         g = (Group) getIntent().getSerializableExtra("selectedGroup");
 
-        getSupportActionBar().setTitle(g.getGroup_name());
-        getSupportActionBar().setElevation(0);
+        TextView groupName = (TextView) findViewById(R.id.group_name);
+        groupName.setText(g.getGroup_name());
 
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
         final ViewPager vp = (ViewPager) findViewById(R.id.fragment_pages);
@@ -51,6 +52,10 @@ public class GroupActivity extends AppCompatActivity {
             GroupSettings g = (GroupSettings) gp.getFragmentAtPosition(1);
             g.refreshOptions();
         }
+    }
+
+    public void changeReject(View v) {
+        finish();
     }
 
     public Group getGroupData() {
