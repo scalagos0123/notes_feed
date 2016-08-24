@@ -2,47 +2,86 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="10dp"
-    android:paddingRight="16dp"
     android:id="@+id/root"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-    <EditText
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:id="@+id/currentEmail"
-        android:textColor="#a27373"
-        android:hint="Current email" />
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="@dimen/appbar_padding_top">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_arrow_back_white_24dp"
+                android:background="@color/transparent"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Change Email"
+                android:textSize="20dp"
+                android:textColor="@color/whiteIcon"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+    </android.support.design.widget.AppBarLayout>
 
 
-
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/newEmail"
-        android:hint="New email"
-        android:textColor="#FFA27373" />
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="16dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:id="@+id/currentEmail"
+            android:textColor="#a27373"
+            android:hint="Current email" />
 
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/retypeEmail"
-        android:hint="Retype email"
-        android:textColor="#FFA27373"
-        android:layout_marginBottom="30dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/newEmail"
+            android:hint="New email"
+            android:textColor="#FFA27373" />
 
 
-    <Button
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/retypeEmail"
+            android:hint="Retype email"
+            android:textColor="#FFA27373"
+            android:layout_marginBottom="30dp"/>
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CHANGE EMAIL"
-        android:id="@+id/button"
-        android:layout_below="@+id/retypePass"
-        android:background="@color/whiteIcon"
-        android:onClick="changeEmail"/>
+
+        <Button
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CHANGE EMAIL"
+            android:id="@+id/button"
+            android:layout_below="@+id/retypePass"
+            android:background="@color/whiteIcon"
+            android:onClick="changeEmail"/>
+
+    </LinearLayout>
 
 </LinearLayout>
