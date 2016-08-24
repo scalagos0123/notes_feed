@@ -1,6 +1,8 @@
 package mobidev.com.notesfeed;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -186,7 +188,11 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
                 System.out.println("Selected note content: " + selectedNote.getNotes_content());
 
                 try {
-                    db.execSQL("UPDATE my_notes set notes_title='"+selectedNote.getNotes_title()+"', notes_content='"+selectedNote.getNotes_content()+"' where notes_id='"+selectedNote.getNotes_id()+"'");
+                    ContentValues c = new ContentValues();
+                    c.put("notes_title", selectedNote.getNotes_title());
+                    c.put("notes_content", selectedNote.getNotes_content());
+
+                    db.update(DatabaseHelper.TABLE_NAME, c, "notes_id=?", new String[] {selectedNote.getNotes_id() + ""});
                     status = true;
                 } catch (SQLException e) {
                     e.printStackTrace();
