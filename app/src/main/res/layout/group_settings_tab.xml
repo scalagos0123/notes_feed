@@ -127,7 +127,8 @@
                 app:contentPaddingBottom="10dp"
                 app:contentPaddingTop="10dp"
                 android:clickable="true"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:foreground="?android:attr/selectableItemBackground">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -145,7 +146,8 @@
                 app:contentPaddingRight="10dp"
                 app:contentPaddingBottom="10dp"
                 app:contentPaddingTop="10dp"
-                android:clickable="true">
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -164,7 +166,8 @@
                 app:contentPaddingRight="10dp"
                 app:contentPaddingBottom="10dp"
                 app:contentPaddingTop="10dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:foreground="?android:attr/selectableItemBackground">
 
                 <TextView
                     android:layout_width="wrap_content"
