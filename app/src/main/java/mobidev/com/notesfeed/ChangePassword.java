@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -19,6 +21,7 @@ import java.net.URL;
 public class ChangePassword extends AppCompatActivity {
 
     private NotesFeedSession n;
+    String newPassword1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState){
@@ -26,7 +29,7 @@ public class ChangePassword extends AppCompatActivity {
         setContentView(R.layout.change_password);
         n = new NotesFeedSession(this);
 
-        Button btnChangePassword = (Button)findViewById(R.id.button);
+        System.out.println("Current Password: "+n.getUserPassword());
 
     }
 
@@ -37,18 +40,15 @@ public class ChangePassword extends AppCompatActivity {
         NotesFeedSession n = new NotesFeedSession(this);
 
         String currentPassword1 = n.getUserPassword();
-        String newPassword1 = newPassword.getText().toString();
+
+        newPassword1 = newPassword.getText().toString();
         String confirmPassword1 = confirmPassword.getText().toString();
 
 
-        if(currentPassword.getText().toString().equals(currentPassword1) && currentPassword.getText().length()>=6) {
+        if(currentPassword.getText().toString().equals(currentPassword1)) {
           if(newPassword.getText().toString().equals(confirmPassword1) && newPassword.getText().length()>=6) {
              //set minimum length (6 characters) - 123456
 
-
-              System.out.println(n.getUserPassword());
-              n.editUserSessionPassword(newPassword1);
-              System.out.println(n.getUserPassword());
 
               Change_password c = new Change_password();
               c.execute(newPassword1);
@@ -79,16 +79,43 @@ public class ChangePassword extends AppCompatActivity {
             boolean status = false;
 
 
-            try{
+            try {
                 URL url = new URL(link);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("POST");
                 urlConnection.getOutputStream().write(bodyBytes);
+
+                BufferedReader r = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+
+                for (int i; (i = r.read()) >= 0;) {
+                    sb.append((char) i);
+                }
+
+                System.out.println(sb);
+                if (sb.toString().equals("true")) {
+                    status = true;
+                } else {
+                    status = false;
+                    System.out.println(sb.toString());
+                }
+
             } catch(Exception e){
                 e.printStackTrace();
             }
 
             return status;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if (aBoolean) {
+
+                System.out.println(n.getUserPassword());
+                n.editUserSessionPassword(newPassword1);
+                System.out.println(n.getUserPassword());
+            }
         }
     }
 
