@@ -53,8 +53,6 @@ public class ChangePassword extends AppCompatActivity {
 
               Change_password c = new Change_password();
               c.execute(newPassword1);
-
-              finish();
           } else {
               currentPassword.setBackgroundColor(getResources().getColor(R.color.redLine));
               confirmPassword.setBackgroundColor(getResources().getColor(R.color.redLine));
@@ -71,10 +69,11 @@ public class ChangePassword extends AppCompatActivity {
     }
 
     public void done() {
-        Toast.makeText(this, "Password changed", Toast.LENGTH_LONG).show();
         System.out.println(n.getUserPassword());
         n.editUserSessionPassword(newPassword1);
         System.out.println(n.getUserPassword());
+        setResult(MainActivity.CHANGE_PASSWORD_SUCCESS);
+        finish();
 
     }
 

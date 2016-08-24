@@ -1,6 +1,7 @@
 package mobidev.com.notesfeed;
 
 import android.content.Context;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
@@ -184,10 +185,16 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
                 System.out.println("Selected note title: " + selectedNote.getNotes_title());
                 System.out.println("Selected note content: " + selectedNote.getNotes_content());
 
-                db.execSQL("UPDATE my_notes set notes_title='"+selectedNote.getNotes_title()+"', notes_content='"+selectedNote.getNotes_content()+"' where notes_id='"+selectedNote.getNotes_id()+"'");
+                try {
+                    db.execSQL("UPDATE my_notes set notes_title='"+selectedNote.getNotes_title()+"', notes_content='"+selectedNote.getNotes_content()+"' where notes_id='"+selectedNote.getNotes_id()+"'");
+                    status = true;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    status = false;
+                }
 //                Integrate the SQLite Database here
 //                Query should be inserted here
-//                Perform update operations of the database only in this part
+//                Perform update operations of the database only in this
 
             }
 
@@ -256,8 +263,13 @@ public class Notes_ListAdapter extends ArrayAdapter<Notes> {
                 }
 
             } else {
-
-                db.execSQL("DELETE from my_notes where notes_id='"+selectedNote.getNotes_id()+"'");
+                try {
+                    db.execSQL("DELETE from my_notes where notes_id='"+selectedNote.getNotes_id()+"'");
+                    status = true;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    status = false;
+                }
 //                Integrate the SQLite Database here
 //                Perform the delete statement strictly here
             }

@@ -27,6 +27,7 @@ public class Tab3 extends Fragment {
 
     ListView list = null;
     String[] myItems = null;
+    NotesFeedSession n;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class Tab3 extends Fragment {
 
                     Intent changePassword = new Intent(getContext(), ChangePassword.class);
                     n = new NotesFeedSession(getContext());
-                    startActivity(changePassword);
+                    startActivityForResult(changePassword, 100);
 
 
                 } else if (itemSelected.equals(myItems[1])) {
@@ -61,7 +62,7 @@ public class Tab3 extends Fragment {
 //                    start the intent here kung change email yung sinelect
                     Intent changeEmail = new Intent(getContext(), ChangeEmail.class);
                     n = new NotesFeedSession(getContext());
-                    startActivity(changeEmail);
+                    startActivityForResult(changeEmail, 101);
 
                 } else if (itemSelected.equals(myItems[2])) {
 //                    Don't mess this part

@@ -37,9 +37,9 @@ public class ChangeEmail extends AppCompatActivity {
     }
 
     public void done() {
-        Toast.makeText(this, "Email changed", Toast.LENGTH_SHORT).show();
         n.editUserSessionEmail(newEmail1);
         System.out.println(n.getUserEmail());
+        setResult(MainActivity.CHANGE_EMAIL_SUCCESS);
         finish();
     }
 

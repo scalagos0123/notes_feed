@@ -1,5 +1,6 @@
 package mobidev.com.notesfeed;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
@@ -8,16 +9,31 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 //Implementing the interface OnTabSelectedListener to our MainActivity
 //This interface would help in swiping views
 public class MainActivity extends AppCompatActivity {
+
+    public final static int CHANGE_EMAIL_SUCCESS = 500;
+    public final static int CHANGE_PASSWORD_SUCCESS = 501;
 
     //This is our tablayout
     private TabLayout tabLayout;
 
     //This is our viewPager
     private ViewPager viewPager;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == CHANGE_EMAIL_SUCCESS) {
+            Toast.makeText(this, "Email updated", Toast.LENGTH_LONG).show();
+        } else if (resultCode == CHANGE_PASSWORD_SUCCESS) {
+            Toast.makeText(this, "Password updated", Toast.LENGTH_LONG).show();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
