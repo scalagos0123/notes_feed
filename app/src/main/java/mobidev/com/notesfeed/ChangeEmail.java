@@ -81,12 +81,12 @@ public class ChangeEmail extends AppCompatActivity {
                 n.execute(newEmail1);
                 done();
             } else {
-                currentEmail.setError("Email does not match.");
-                retypeEmail.setError("Email does not match.");
+                newEmail.setError("Emails don't match.");
+                retypeEmail.setError("Emails don't match.");
             }
         } else {
             //call edittext, change color red
-            currentEmail.setError("You currently have the same email.");
+            currentEmail.setError("Invalid email.");
         }
     }
 
