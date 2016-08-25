@@ -81,12 +81,12 @@ public class ChangeEmail extends AppCompatActivity {
                 n.execute(newEmail1);
                 done();
             } else {
-                currentEmail.setTextColor(getResources().getColor(R.color.redLine));
-                retypeEmail.setTextColor(getResources().getColor(R.color.redLine));
+                currentEmail.setError("Email does not match.");
+                retypeEmail.setError("Email does not match.");
             }
         } else {
             //call edittext, change color red
-            currentEmail.setTextColor(getResources().getColor(R.color.redLine));
+            currentEmail.setError("You currently have the same email.");
         }
     }
 

@@ -55,12 +55,15 @@ public class ChangePassword extends AppCompatActivity {
               Change_password c = new Change_password();
               c.execute(newPassword1);
           } else {
-              currentPassword.setBackgroundColor(getResources().getColor(R.color.redLine));
-              confirmPassword.setBackgroundColor(getResources().getColor(R.color.redLine));
+            //  currentPassword.setError(getResources().getColor(R.color.redLine));
+            //  confirmPassword.setError(getResources().getColor(R.color.redLine));
+              currentPassword.setError("Passwords do not match.");
+              confirmPassword.setError("Passwords do not match.");
           }
         } else {
             //call edittext, change color red
-            currentPassword.setBackgroundColor(getResources().getColor(R.color.redLine));
+            //currentPassword.setBackgroundColor(getResources().getColor(R.color.redLine));
+            currentPassword.setError("You currently have the same password.");
         }
         //get currentpassword
         //enter new password
